@@ -20,66 +20,68 @@
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden;}
-  .page{display:none;min-height:100vh;animation:fadeIn .4s ease;}
+  .page{display:none;min-height:100vh;animation:fadeIn .3s ease;}
   .page.active{display:block;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
   
-  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 36px;background:rgba(14,17,23,.92);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(201,168,76,.18);}
-  .logo{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--gold);letter-spacing:1px;cursor:pointer;}
-  .logo span{color:var(--text);font-size:1rem;font-family:'DM Sans',sans-serif;margin-left:6px;font-weight:300;}
-  nav .nav-right{display:flex;gap:12px;align-items:center;}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:rgba(14,17,23,.92);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(201,168,76,.18);}
+  .logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);letter-spacing:1px;cursor:pointer;}
+  .logo span{color:var(--text);font-size:.9rem;font-family:'DM Sans',sans-serif;margin-left:6px;font-weight:300;}
+  nav .nav-right{display:flex;gap:10px;align-items:center;}
   
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 22px;border-radius:50px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;transition:.2s;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:50px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:500;transition:.2s;text-decoration:none;}
   .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0E1117;}
-  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,168,76,.35);}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(201,168,76,.35);}
   .btn-outline{background:transparent;border:1.5px solid var(--gold);color:var(--gold);}
   .btn-outline:hover{background:rgba(201,168,76,.1);}
   .btn-ghost{background:rgba(255,255,255,.07);color:var(--text);border:1.5px solid rgba(255,255,255,.12);}
   .btn-ghost:hover{background:rgba(255,255,255,.13);}
   .btn-green{background:linear-gradient(135deg,#2ECC8A,#26B579);color:#0E1117;}
-  .btn-lg{padding:14px 34px;font-size:1.05rem;}
+  .btn-lg{padding:14px 32px;font-size:1rem;}
   
-  .hero{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px 40px;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,.12) 0%,transparent 70%),var(--dark);position:relative;}
-  .hero-badge{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:6px 18px;border-radius:50px;font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:24px;}
-  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,7vw,4.5rem);line-height:1.1;margin-bottom:20px;background:linear-gradient(135deg,#fff 30%,var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .hero p{font-size:1.15rem;color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:36px;}
-  .hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+  .hero{min-height:75vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,.12) 0%,transparent 70%),var(--dark);}
+  .hero-badge{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:6px 16px;border-radius:50px;font-size:.8rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px;}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,6vw,4rem);line-height:1.15;margin-bottom:16px;background:linear-gradient(135deg,#fff 30%,var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero p{font-size:1.05rem;color:var(--muted);max-width:540px;line-height:1.6;margin-bottom:30px;}
+  .hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
   
-  .section{padding:60px 24px;max-width:1100px;margin:0 auto;}
-  .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.5rem);margin-bottom:12px;text-align:center;color:var(--gold-light);}
-  .section-sub{color:var(--muted);font-size:1rem;margin-bottom:40px;text-align:center;}
+  .section{padding:50px 20px;max-width:1100px;margin:0 auto;}
+  .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,4vw,2.3rem);margin-bottom:10px;text-align:center;color:var(--gold-light);}
+  .section-sub{color:var(--muted);font-size:.95rem;margin-bottom:32px;text-align:center;}
   
-  .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
-  .card{background:var(--card);border:1px solid rgba(201,168,76,.12);border-radius:var(--radius);padding:28px 24px;transition:.25s;}
-  .card h3{font-size:1.05rem;margin-bottom:8px;color:var(--gold-light);}
-  .card p{font-size:.88rem;color:var(--muted);line-height:1.6;}
+  .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;}
+  .card{background:var(--card);border:1px solid rgba(201,168,76,.12);border-radius:var(--radius);padding:24px 20px;}
+  .card h3{font-size:1rem;margin-bottom:8px;color:var(--gold-light);}
+  .card p{font-size:.85rem;color:var(--muted);line-height:1.5;}
   
-  .option-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:700px;margin:0 auto;}
+  .option-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:680px;margin:0 auto;}
   @media(max-width:580px){.option-grid{grid-template-columns:1fr;}}
-  .option-card{background:var(--dark3);border:2px solid rgba(201,168,76,.15);border-radius:22px;padding:44px 28px;text-align:center;cursor:pointer;}
+  .option-card{background:var(--dark3);border:2px solid rgba(201,168,76,.15);border-radius:20px;padding:36px 24px;text-align:center;cursor:pointer;}
   .option-card:hover{border-color:var(--gold);}
   
-  .form-wrap{max-width:600px;margin:0 auto;}
-  .form-group{margin-bottom:20px;}
-  label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:7px;text-transform:uppercase;}
-  input, select{width:100%;background:var(--dark3);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;color:var(--text);outline:none;}
+  .form-wrap{max-width:580px;margin:0 auto;}
+  .form-group{margin-bottom:18px;}
+  label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+  input, select{width:100%;background:var(--dark3);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;color:var(--text);outline:none;font-size:.95rem;}
   input:focus, select:focus{border-color:var(--gold);}
   
-  .pill-group{display:flex;flex-wrap:wrap;gap:10px;}
-  .pill{padding:8px 18px;border-radius:50px;border:1.5px solid rgba(255,255,255,.12);background:transparent;color:var(--muted);cursor:pointer;}
-  .pill.selected{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1);}
+  .pill-group{display:flex;flex-wrap:wrap;gap:8px;}
+  .pill{padding:8px 16px;border-radius:50px;border:1.5px solid rgba(255,255,255,.12);background:transparent;color:var(--muted);cursor:pointer;font-size:.88rem;}
+  .pill.selected{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.12);}
   
-  .house-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
-  .house-card{background:var(--card);border-radius:var(--radius);border:1px solid rgba(255,255,255,.07);overflow:hidden;}
-  .house-img{height:180px;background:#1E2A3A;display:flex;align-items:center;justify-content:center;font-size:3.5rem;}
-  .house-info{padding:18px;}
+  .house-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px;}
+  .house-card{background:var(--card);border-radius:var(--radius);border:1px solid rgba(255,255,255,.08);overflow:hidden;display:flex;flex-direction:column;}
+  .house-img-box{height:190px;background:#1E2A3A;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+  .house-img-box img{width:100%;height:100%;object-fit:cover;}
+  .house-info{padding:18px;display:flex;flex-direction:column;flex-grow:1;}
   .house-info h4{font-size:1.1rem;margin-bottom:6px;color:#fff;}
-  .house-info .price{color:var(--gold);font-weight:600;font-size:1.1rem;margin-bottom:6px;}
+  .house-info .price{color:var(--gold);font-weight:600;font-size:1.15rem;margin-bottom:6px;}
   .house-info .loc{color:var(--muted);font-size:.85rem;margin-bottom:12px;}
   
-  .page-header{padding:40px 24px 20px;text-align:center;}
-  .page-header h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold-light);}
-  footer{text-align:center;padding:30px;border-top:1px solid rgba(255,255,255,.07);color:var(--muted);font-size:.82rem;}
+  .page-header{padding:32px 20px 16px;text-align:center;}
+  .page-header h2{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold-light);}
+  .contact-box{background:var(--card);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:30px;max-width:500px;margin:20px auto;text-align:center;}
+  footer{text-align:center;padding:24px;border-top:1px solid rgba(255,255,255,.07);color:var(--muted);font-size:.8rem;}
 </style>
 </head>
 <body>
@@ -96,8 +98,8 @@
   <div class="hero">
     <div class="hero-badge">🏠 India's Trusted Rental Platform</div>
     <h1>Welcome to<br/>SR Nest</h1>
-    <p style="font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; margin-bottom:18px; color:var(--gold-light);">✨ Designed by Sreejith Reddy ✨</p>
-    <p>Your trusted partner for finding the perfect rental home — or listing your property to verified tenants.</p>
+    <p style="font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; margin-bottom:16px; color:var(--gold-light);">✨ Designed by Sreejith Reddy ✨</p>
+    <p>Your trusted platform for finding the perfect rental home — or listing your house for tenants.</p>
     <div class="hero-btns">
       <button class="btn btn-gold btn-lg" onclick="goPage(2)">🚀 Get Started</button>
       <button class="btn btn-outline btn-lg" onclick="goPage(5)">🔍 Browse All Homes</button>
@@ -106,14 +108,14 @@
 
   <div class="section">
     <div class="section-title">Why Choose SR Nest?</div>
-    <p class="section-sub">Simple, transparent, and built for everyone.</p>
+    <p class="section-sub">Simple, direct, and built for renters and owners.</p>
     <div class="cards-grid">
-      <div class="card"><h3>✅ Direct Contact</h3><p>Talk directly to property owners with no middlemen.</p></div>
-      <div class="card"><h3>🔒 Verified Listings</h3><p>Real details, clear pricing, and trusted owner contacts.</p></div>
-      <div class="card"><h3>⚡ Fast Search</h3><p>Filter by location, BHK, and price range in seconds.</p></div>
+      <div class="card"><h3>✅ Direct Contact</h3><p>Reach owners directly via call or WhatsApp.</p></div>
+      <div class="card"><h3>🖼️ Photo Listings</h3><p>View uploaded house photos and transparent details.</p></div>
+      <div class="card"><h3>⚡ Simple Search</h3><p>Filter easily by area and room requirements.</p></div>
     </div>
   </div>
-  <footer>© 2026 SR Nest · Built with Firebase Realtime Database</footer>
+  <footer>© 2026 SR Nest · Platform Developed by Sreejith Reddy</footer>
 </div>
 
 <div class="page" id="page-2">
@@ -121,18 +123,18 @@
     <h2>Select Your Goal</h2>
     <p>What would you like to do on SR Nest today?</p>
   </div>
-  <div style="padding:20px 24px 60px;">
+  <div style="padding:10px 20px 50px;">
     <div class="option-grid">
       <div class="option-card" onclick="goPage(4)">
-        <div style="font-size:3rem;margin-bottom:12px;">🏡</div>
+        <div style="font-size:3rem;margin-bottom:10px;">🏡</div>
         <h3 style="color:var(--gold-light);margin-bottom:8px;">List My Property</h3>
-        <p style="color:var(--muted);font-size:.9rem;margin-bottom:18px;">Post your house for rent and receive inquiries directly.</p>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:16px;">Post your house for rent with photos and contact info.</p>
         <button class="btn btn-gold" style="width:100%">List Property →</button>
       </div>
       <div class="option-card" onclick="goPage(3)">
-        <div style="font-size:3rem;margin-bottom:12px;">🔍</div>
+        <div style="font-size:3rem;margin-bottom:10px;">🔍</div>
         <h3 style="color:var(--gold-light);margin-bottom:8px;">Find a Rental Home</h3>
-        <p style="color:var(--muted);font-size:.9rem;margin-bottom:18px;">Search available houses by budget, BHK, and city.</p>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:16px;">Search available properties by location and BHK.</p>
         <button class="btn btn-outline" style="width:100%">Search Homes →</button>
       </div>
     </div>
@@ -142,13 +144,14 @@
 <div class="page" id="page-3">
   <div class="page-header">
     <h2>Find Your Next Home</h2>
-    <p>Set your preferences to search available listings.</p>
+    <p>Set your location or BHK preference to filter.</p>
   </div>
-  <div style="padding:0 24px 60px;">
+  <div style="padding:0 20px 50px;">
     <div class="form-wrap">
       <div class="form-group">
         <label>🏠 BHK Type</label>
         <div class="pill-group" id="bhk-filter">
+          <div class="pill" onclick="selectPill(this, 'bhk-filter')">All</div>
           <div class="pill" onclick="selectPill(this, 'bhk-filter')">1 BHK</div>
           <div class="pill" onclick="selectPill(this, 'bhk-filter')">2 BHK</div>
           <div class="pill" onclick="selectPill(this, 'bhk-filter')">3 BHK</div>
@@ -156,10 +159,11 @@
         </div>
       </div>
       <div class="form-group">
-        <label>📍 Preferred Location</label>
-        <input type="text" id="search-location" placeholder="e.g. Hyderabad, Bangalore, Gachibowli"/>
+        <label>📍 Search Location / City</label>
+        <input type="text" id="search-location" placeholder="e.g. Hyderabad, Jubilee Hills, Gachibowli"/>
       </div>
-      <button class="btn btn-gold btn-lg" style="width:100%; margin-top:20px;" onclick="applyFiltersAndSearch()">🔍 Show Matching Homes</button>
+      <button class="btn btn-gold btn-lg" style="width:100%; margin-top:16px;" onclick="applyFiltersAndSearch()">🔍 Show Matching Homes</button>
+      <button class="btn btn-ghost" style="width:100%; margin-top:10px;" onclick="resetSearchAndShowAll()">Reset Filters & View All</button>
     </div>
   </div>
 </div>
@@ -167,9 +171,9 @@
 <div class="page" id="page-4">
   <div class="page-header">
     <h2>Post a Property Listing</h2>
-    <p>Upload details directly to the live SR Nest database.</p>
+    <p>Fill out details to put your house up for rent.</p>
   </div>
-  <div style="padding:0 24px 60px;">
+  <div style="padding:0 20px 50px;">
     <div class="form-wrap">
       <form id="property-form">
         <div class="form-group">
@@ -178,10 +182,10 @@
         </div>
         <div class="form-group">
           <label>Phone Number</label>
-          <input type="tel" id="prop-phone" required placeholder="e.g. +91 9876543210"/>
+          <input type="tel" id="prop-phone" required placeholder="e.g. 9063576302"/>
         </div>
         <div class="form-group">
-          <label>Location / Area</label>
+          <label>Location / Address</label>
           <input type="text" id="prop-location" required placeholder="e.g. Jubilee Hills, Hyderabad"/>
         </div>
         <div class="form-group">
@@ -197,7 +201,11 @@
             <option value="4 BHK">4 BHK</option>
           </select>
         </div>
-        <button type="submit" id="submit-btn" class="btn btn-gold btn-lg" style="width:100%; margin-top:10px;">💾 Publish Listing Now</button>
+        <div class="form-group">
+          <label>📸 Upload House Image</label>
+          <input type="file" id="prop-image" accept="image/*" required />
+        </div>
+        <button type="submit" id="submit-btn" class="btn btn-gold btn-lg" style="width:100%; margin-top:10px;">💾 Post House for Rent</button>
       </form>
     </div>
   </div>
@@ -205,10 +213,10 @@
 
 <div class="page" id="page-5">
   <div class="page-header">
-    <h2>Live Rental Homes</h2>
-    <p>Browse property listings saved directly in the cloud database.</p>
+    <h2>Available Homes for Rent</h2>
+    <p>Direct owner contacts with uploaded house photos.</p>
   </div>
-  <div style="padding:0 24px 60px;">
+  <div style="padding:0 20px 50px;">
     <div class="house-grid" id="homes-container">
       <p style="text-align:center; grid-column:1/-1; color:var(--muted);">Fetching active listings...</p>
     </div>
@@ -218,11 +226,20 @@
 <div class="page" id="page-7">
   <div class="page-header">
     <h2>SR Nest Support</h2>
-    <p>Have questions? Reach out to us anytime.</p>
+    <p>Need help? Contact developer & founder Sreejith Reddy.</p>
   </div>
-  <div style="padding:0 24px 60px; text-align:center;">
-    <p style="color:var(--muted); margin-bottom:20px;">Contact Founder & Developer Sreejith Reddy for platform queries.</p>
-    <a href="https://wa.me/" class="btn btn-green btn-lg" target="_blank">💬 WhatsApp Support</a>
+  <div style="padding:0 20px 50px;">
+    <div class="contact-box">
+      <div style="font-size:3rem; margin-bottom:12px;">📞</div>
+      <h3 style="color:var(--gold-light); margin-bottom:12px;">Contact SR Nest Support</h3>
+      <p style="color:var(--muted); font-size:.95rem; margin-bottom:20px;">For help with house listings, technical support, or questions, contact us via phone or email.</p>
+      
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <a href="tel:9063576302" class="btn btn-gold btn-lg">📞 Call 9063576302</a>
+        <a href="https://wa.me/919063576302" class="btn btn-green btn-lg" target="_blank">💬 WhatsApp 9063576302</a>
+        <a href="mailto:gantasreejithreddy@gmail.com" class="btn btn-outline btn-lg">✉️ Send Email</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -230,7 +247,6 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  // Your exact Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyAtTHJpBv9WcG3M_b_r1VavxgPgqPHnljE",
     authDomain: "sr-nest.firebaseapp.com",
@@ -244,22 +260,75 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Global Page Navigation
-  window.goPage = function(pageNum) {
+  let activeFilterBhk = null;
+  let activeFilterLoc = '';
+
+  // Prevent back button from closing web app (Single Page Application State)
+  window.history.replaceState({ page: 1 }, '', '');
+
+  window.goPage = function(pageNum, pushState = true) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
     const targetPage = document.getElementById('page-' + pageNum);
     if (targetPage) targetPage.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+    if (pushState) {
+      window.history.pushState({ page: pageNum }, '', '');
+    }
+
     if (pageNum === 5) {
-      loadPropertiesFromDB();
+      loadPropertiesFromDB(activeFilterBhk, activeFilterLoc);
     }
   };
+
+  window.onpopstate = function(event) {
+    if (event.state && event.state.page) {
+      goPage(event.state.page, false);
+    } else {
+      goPage(1, false);
+    }
+  };
+
+  // Helper function to convert image file to Base64 data string
+  function compressAndConvertImage(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 600;
+
+          if (width > height && width > maxDim) {
+            height *= maxDim / width;
+            width = maxDim;
+          } else if (height > maxDim) {
+            width *= maxDim / height;
+            height = maxDim;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.7));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
 
   // Filter Pills Selection
   window.selectPill = function(el, groupId) {
     document.querySelectorAll('#' + groupId + ' .pill').forEach(p => p.classList.remove('selected'));
     el.classList.add('selected');
+    const text = el.innerText.trim();
+    activeFilterBhk = (text === 'All') ? null : text;
   };
 
   // Submit Listing Form to Firestore
@@ -268,29 +337,41 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submit-btn');
-      btn.disabled = true;
-      btn.innerText = "Publishing to Cloud...";
+      const fileInput = document.getElementById('prop-image');
 
-      const listingData = {
-        owner: document.getElementById('prop-owner').value,
-        phone: document.getElementById('prop-phone').value,
-        location: document.getElementById('prop-location').value,
-        rent: Number(document.getElementById('prop-rent').value),
-        bhk: document.getElementById('prop-bhk').value,
-        timestamp: new Date()
-      };
+      if (!fileInput.files || fileInput.files.length === 0) {
+        alert("Please select a house photo to upload!");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Processing & Publishing...";
 
       try {
+        const imageBase64 = await compressAndConvertImage(fileInput.files[0]);
+
+        const listingData = {
+          owner: document.getElementById('prop-owner').value.trim(),
+          phone: document.getElementById('prop-phone').value.trim(),
+          location: document.getElementById('prop-location').value.trim(),
+          rent: Number(document.getElementById('prop-rent').value),
+          bhk: document.getElementById('prop-bhk').value,
+          imageUrl: imageBase64,
+          timestamp: new Date()
+        };
+
         await addDoc(collection(db, "listings"), listingData);
-        alert("🎉 Property listed successfully in Cloud Database!");
+        alert("🎉 Property listed successfully with photo!");
         form.reset();
+        activeFilterBhk = null;
+        activeFilterLoc = '';
         goPage(5);
       } catch (error) {
         console.error("Database save error:", error);
-        alert("Failed to save to database. Check internet connection.");
+        alert("Failed to save listing. Please try again.");
       } finally {
         btn.disabled = false;
-        btn.innerText = "💾 Publish Listing Now";
+        btn.innerText = "💾 Post House for Rent";
       }
     });
   }
@@ -315,39 +396,45 @@
     }
 
     if (filterBhk) {
-      listings = listings.filter(item => item.bhk === filterBhk);
+      listings = listings.filter(item => item.bhk && item.bhk.toLowerCase().trim() === filterBhk.toLowerCase().trim());
     }
-    if (filterLoc.trim() !== '') {
-      listings = listings.filter(item => item.location.toLowerCase().includes(filterLoc.toLowerCase()));
+    if (filterLoc && filterLoc.trim() !== '') {
+      listings = listings.filter(item => item.location && item.location.toLowerCase().includes(filterLoc.toLowerCase().trim()));
     }
 
     if (listings.length === 0) {
-      container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--muted);">No properties match your search.</p>';
+      container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--muted);">No properties match your filter criteria.<br/><br/><button class="btn btn-outline" onclick="resetSearchAndShowAll()">Clear Search & Show All</button></p>';
       return;
     }
 
     container.innerHTML = listings.map(item => `
       <div class="house-card">
-        <div class="house-img">🏡</div>
+        <div class="house-img-box">
+          ${item.imageUrl ? `<img src="${item.imageUrl}" alt="House Photo"/>` : `<div style="font-size:3.5rem;">🏡</div>`}
+        </div>
         <div class="house-info">
           <h4>${item.bhk} Apartment</h4>
-          <div class="price">₹${item.rent.toLocaleString('en-IN')} / month</div>
+          <div class="price">₹${Number(item.rent).toLocaleString('en-IN')} / month</div>
           <div class="loc">📍 ${item.location}</div>
           <div style="font-size:.82rem; color:var(--gold-light); margin-bottom:12px;">Owner: ${item.owner}</div>
-          <a href="tel:${item.phone}" class="btn btn-gold" style="width:100%; text-decoration:none;">📞 Call ${item.phone}</a>
+          <a href="tel:${item.phone}" class="btn btn-gold" style="width:100%;">📞 Call ${item.phone}</a>
         </div>
       </div>
     `).join('');
   }
 
-  // Search Filter Handler
   window.applyFiltersAndSearch = function() {
-    const selectedPill = document.querySelector('#bhk-filter .pill.selected');
-    const bhkVal = selectedPill ? selectedPill.innerText : null;
-    const locVal = document.getElementById('search-location').value;
-
+    activeFilterLoc = document.getElementById('search-location').value;
     goPage(5);
-    loadPropertiesFromDB(bhkVal, locVal);
+  };
+
+  window.resetSearchAndShowAll = function() {
+    activeFilterBhk = null;
+    activeFilterLoc = '';
+    const searchInput = document.getElementById('search-location');
+    if (searchInput) searchInput.value = '';
+    document.querySelectorAll('#bhk-filter .pill').forEach(p => p.classList.remove('selected'));
+    goPage(5);
   };
 </script>
 
