@@ -37,6 +37,7 @@
   .btn-ghost{background:rgba(255,255,255,.07);color:var(--text);border:1.5px solid rgba(255,255,255,.12);}
   .btn-ghost:hover{background:rgba(255,255,255,.13);}
   .btn-green{background:linear-gradient(135deg,#2ECC8A,#26B579);color:#0E1117;}
+  .btn-red{background:rgba(232,93,93,.15);border:1px solid var(--red);color:var(--red);}
   .btn-lg{padding:14px 32px;font-size:1rem;}
   
   .hero{min-height:75vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,.12) 0%,transparent 70%),var(--dark);}
@@ -82,15 +83,23 @@
   .page-header h2{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold-light);}
   .contact-box{background:var(--card);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:30px;max-width:500px;margin:20px auto;text-align:center;}
   footer{text-align:center;padding:24px;border-top:1px solid rgba(255,255,255,.07);color:var(--muted);font-size:.8rem;}
+  
+  .notif-banner{background:rgba(201,168,76,.15);border:1px solid var(--gold);padding:12px 20px;text-align:center;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.88rem;}
 </style>
 </head>
 <body>
+
+<div class="notif-banner" id="notif-banner">
+  <span>🔔 Enable instant notifications for new property listings!</span>
+  <button class="btn btn-gold" style="padding:6px 14px; font-size:.8rem;" onclick="enableNotifications()">Enable Alerts</button>
+</div>
 
 <nav>
   <div class="logo" onclick="goPage(1)">SR Nest <span>Rental Hub</span></div>
   <div class="nav-right">
     <button class="btn btn-ghost" onclick="goPage(7)">Support</button>
-    <button class="btn btn-gold" onclick="goPage(2)">Get Started</button>
+    <button class="btn btn-outline" id="nav-login-btn" onclick="goPage(8)">🔑 Login</button>
+    <button class="btn btn-gold" id="nav-profile-btn" style="display:none;" onclick="goPage(8)">👤 Profile</button>
   </div>
 </nav>
 
@@ -125,7 +134,7 @@
   </div>
   <div style="padding:10px 20px 50px;">
     <div class="option-grid">
-      <div class="option-card" onclick="goPage(4)">
+      <div class="option-card" onclick="checkAuthAndGoList()">
         <div style="font-size:3rem;margin-bottom:10px;">🏡</div>
         <h3 style="color:var(--gold-light);margin-bottom:8px;">List My Property</h3>
         <p style="color:var(--muted);font-size:.88rem;margin-bottom:16px;">Post your house for rent with photos and contact info.</p>
@@ -243,9 +252,51 @@
   </div>
 </div>
 
+<div class="page" id="page-8">
+  <div class="page-header">
+    <h2 id="auth-title">User Login</h2>
+    <p id="auth-subtitle">Log in to save your details and manage your listings.</p>
+  </div>
+  <div style="padding:0 20px 50px;">
+    <div id="auth-logged-out" class="contact-box">
+      <button class="btn btn-ghost btn-lg" style="width:100%; margin-bottom:16px; background:#fff; color:#000;" onclick="loginWithGoogle()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"/> Sign in with Google
+      </button>
+
+      <div style="margin:20px 0; color:var(--muted); font-size:.85rem;">— OR PHONE LOGIN —</div>
+
+      <div class="form-group" style="text-align:left;">
+        <label>Mobile Number (with country code)</label>
+        <input type="tel" id="phone-number" placeholder="+91 9063576302"/>
+      </div>
+      <div id="recaptcha-container"></div>
+      <button class="btn btn-gold btn-lg" id="send-otp-btn" style="width:100%; margin-top:10px;" onclick="sendOTP()">📱 Send OTP</button>
+
+      <div id="otp-group" style="display:none; margin-top:20px; text-align:left;">
+        <div class="form-group">
+          <label>Enter 6-Digit OTP</label>
+          <input type="number" id="otp-code" placeholder="123456"/>
+        </div>
+        <button class="btn btn-green btn-lg" style="width:100%;" onclick="verifyOTP()">✅ Verify & Sign In</button>
+      </div>
+    </div>
+
+    <div id="auth-logged-in" class="contact-box" style="display:none;">
+      <div style="font-size:3rem; margin-bottom:10px;">👤</div>
+      <h3 id="user-display-name" style="color:var(--gold-light);">Welcome User</h3>
+      <p id="user-display-info" style="color:var(--muted); font-size:.9rem; margin-bottom:20px;"></p>
+      
+      <button class="btn btn-gold btn-lg" style="width:100%; margin-bottom:12px;" onclick="goPage(4)">🏡 List a New Property</button>
+      <button class="btn btn-red btn-lg" style="width:100%;" onclick="logoutUser()">🚪 Sign Out</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAtTHJpBv9WcG3M_b_r1VavxgPgqPHnljE",
@@ -259,37 +310,155 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const auth = getAuth(app);
+  const messaging = getMessaging(app);
 
+  let currentUser = null;
+  let confirmationResult = null;
   let activeFilterBhk = null;
   let activeFilterLoc = '';
 
-  // Prevent back button from closing web app (Single Page Application State)
-  window.history.replaceState({ page: 1 }, '', '');
+  // Register Service Worker for Push Notifications
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/SR-nest.-Sreejithreddy-/firebase-messaging-sw.js')
+      .then((reg) => console.log('Service Worker Registered!', reg))
+      .catch((err) => console.log('SW Registration failed:', err));
+  }
 
+  // Request Notification Permission
+  window.enableNotifications = async function() {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        const token = await getToken(messaging, { 
+          vapidKey: 'BDRRWSVUap3JlA3mpwPGrf0_FNOIs4giN_OyynN6MEaKy5KvbaOarsXV1mVZ-5SS6c3BN0F9D6GMVIL2udOI1SE' 
+        });
+        if (token) {
+          console.log('Notification Token:', token);
+          alert('🎉 Push notifications enabled successfully!');
+          document.getElementById('notif-banner').style.display = 'none';
+        }
+      } else {
+        alert('Notification permission denied.');
+      }
+    } catch (err) {
+      console.error('Error enabling notifications:', err);
+      alert('Failed to enable notifications.');
+    }
+  };
+
+  // Foreground notification handler
+  onMessage(messaging, (payload) => {
+    alert(`🔔 ${payload.notification.title}\n${payload.notification.body}`);
+  });
+
+  // Auth State Listener
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+    const loginBtn = document.getElementById('nav-login-btn');
+    const profileBtn = document.getElementById('nav-profile-btn');
+    const loggedOutBox = document.getElementById('auth-logged-out');
+    const loggedInBox = document.getElementById('auth-logged-in');
+
+    if (user) {
+      if(loginBtn) loginBtn.style.display = 'none';
+      if(profileBtn) profileBtn.style.display = 'inline-flex';
+      if(loggedOutBox) loggedOutBox.style.display = 'none';
+      if(loggedInBox) loggedInBox.style.display = 'block';
+
+      document.getElementById('auth-title').innerText = "My Account Profile";
+      document.getElementById('auth-subtitle').innerText = "Your account is logged in and active.";
+      document.getElementById('user-display-name').innerText = user.displayName || "SR Nest User";
+      document.getElementById('user-display-info').innerText = user.email || user.phoneNumber || "";
+
+      if(user.displayName) document.getElementById('prop-owner').value = user.displayName;
+      if(user.phoneNumber) document.getElementById('prop-phone').value = user.phoneNumber;
+    } else {
+      if(loginBtn) loginBtn.style.display = 'inline-flex';
+      if(profileBtn) profileBtn.style.display = 'none';
+      if(loggedOutBox) loggedOutBox.style.display = 'block';
+      if(loggedInBox) loggedInBox.style.display = 'none';
+
+      document.getElementById('auth-title').innerText = "User Login";
+      document.getElementById('auth-subtitle').innerText = "Log in to save your details and manage your listings.";
+    }
+  });
+
+  window.loginWithGoogle = async function() {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      alert("🎉 Logged in successfully with Google!");
+      goPage(1);
+    } catch(err) {
+      console.error(err);
+      alert("Google Sign-In failed: " + err.message);
+    }
+  };
+
+  window.sendOTP = async function() {
+    const phone = document.getElementById('phone-number').value.trim();
+    if(!phone) { alert("Please enter a phone number with country code (e.g. +919063576302)"); return; }
+
+    if(!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
+    }
+
+    try {
+      confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+      document.getElementById('otp-group').style.display = 'block';
+      alert("💬 OTP sent to " + phone);
+    } catch(err) {
+      console.error(err);
+      alert("Failed to send OTP: " + err.message);
+    }
+  };
+
+  window.verifyOTP = async function() {
+    const code = document.getElementById('otp-code').value.trim();
+    if(!code) { alert("Please enter the OTP code."); return; }
+
+    try {
+      await confirmationResult.confirm(code);
+      alert("🎉 Phone verified and logged in!");
+      goPage(1);
+    } catch(err) {
+      alert("Invalid OTP code. Please try again.");
+    }
+  };
+
+  window.logoutUser = function() {
+    signOut(auth).then(() => {
+      alert("Signed out successfully.");
+      goPage(1);
+    });
+  };
+
+  window.checkAuthAndGoList = function() {
+    if(!currentUser) {
+      alert("Please log in first to post a property listing.");
+      goPage(8);
+    } else {
+      goPage(4);
+    }
+  };
+
+  window.history.replaceState({ page: 1 }, '', '');
   window.goPage = function(pageNum, pushState = true) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
     const targetPage = document.getElementById('page-' + pageNum);
     if (targetPage) targetPage.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    if (pushState) {
-      window.history.pushState({ page: pageNum }, '', '');
-    }
-
-    if (pageNum === 5) {
-      loadPropertiesFromDB(activeFilterBhk, activeFilterLoc);
-    }
+    if (pushState) window.history.pushState({ page: pageNum }, '', '');
+    if (pageNum === 5) loadPropertiesFromDB(activeFilterBhk, activeFilterLoc);
   };
 
   window.onpopstate = function(event) {
-    if (event.state && event.state.page) {
-      goPage(event.state.page, false);
-    } else {
-      goPage(1, false);
-    }
+    if (event.state && event.state.page) goPage(event.state.page, false);
+    else goPage(1, false);
   };
 
-  // Helper function to convert image file to Base64 data string
   function compressAndConvertImage(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -297,33 +466,20 @@
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          const maxDim = 600;
-
-          if (width > height && width > maxDim) {
-            height *= maxDim / width;
-            width = maxDim;
-          } else if (height > maxDim) {
-            width *= maxDim / height;
-            height = maxDim;
-          }
-
-          canvas.width = width;
-          canvas.height = height;
+          let width = img.width, height = img.height, maxDim = 600;
+          if (width > height && width > maxDim) { height *= maxDim / width; width = maxDim; }
+          else if (height > maxDim) { width *= maxDim / height; height = maxDim; }
+          canvas.width = width; canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
           resolve(canvas.toDataURL('image/jpeg', 0.7));
         };
-        img.onerror = reject;
-        img.src = e.target.result;
+        img.onerror = reject; img.src = e.target.result;
       };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+      reader.onerror = reject; reader.readAsDataURL(file);
     });
   }
 
-  // Filter Pills Selection
   window.selectPill = function(el, groupId) {
     document.querySelectorAll('#' + groupId + ' .pill').forEach(p => p.classList.remove('selected'));
     el.classList.add('selected');
@@ -331,26 +487,23 @@
     activeFilterBhk = (text === 'All') ? null : text;
   };
 
-  // Submit Listing Form to Firestore
   const form = document.getElementById('property-form');
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = document.getElementById('submit-btn');
+      if(!currentUser) { alert("Please log in first!"); goPage(8); return; }
+
       const fileInput = document.getElementById('prop-image');
+      if (!fileInput.files || fileInput.files.length === 0) { alert("Please select a house photo!"); return; }
 
-      if (!fileInput.files || fileInput.files.length === 0) {
-        alert("Please select a house photo to upload!");
-        return;
-      }
-
-      btn.disabled = true;
-      btn.innerText = "Processing & Publishing...";
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true; btn.innerText = "Processing & Publishing...";
 
       try {
         const imageBase64 = await compressAndConvertImage(fileInput.files[0]);
 
         const listingData = {
+          userId: currentUser.uid,
           owner: document.getElementById('prop-owner').value.trim(),
           phone: document.getElementById('prop-phone').value.trim(),
           location: document.getElementById('prop-location').value.trim(),
@@ -361,46 +514,32 @@
         };
 
         await addDoc(collection(db, "listings"), listingData);
-        alert("🎉 Property listed successfully with photo!");
+        alert("🎉 Property listed successfully with photo under your account!");
         form.reset();
-        activeFilterBhk = null;
-        activeFilterLoc = '';
         goPage(5);
       } catch (error) {
         console.error("Database save error:", error);
         alert("Failed to save listing. Please try again.");
       } finally {
-        btn.disabled = false;
-        btn.innerText = "💾 Post House for Rent";
+        btn.disabled = false; btn.innerText = "💾 Post House for Rent";
       }
     });
   }
 
-  // Load properties from Firestore onto Page 5
   async function loadPropertiesFromDB(filterBhk = null, filterLoc = '') {
     const container = document.getElementById('homes-container');
     if (!container) return;
-    
     container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--muted);">Fetching active listings...</p>';
 
     let listings = [];
-
     try {
       const q = query(collection(db, "listings"), orderBy("timestamp", "desc"));
       const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        listings.push(doc.data());
-      });
-    } catch (err) {
-      console.error("Error fetching listings:", err);
-    }
+      querySnapshot.forEach((doc) => listings.push(doc.data()));
+    } catch (err) { console.error(err); }
 
-    if (filterBhk) {
-      listings = listings.filter(item => item.bhk && item.bhk.toLowerCase().trim() === filterBhk.toLowerCase().trim());
-    }
-    if (filterLoc && filterLoc.trim() !== '') {
-      listings = listings.filter(item => item.location && item.location.toLowerCase().includes(filterLoc.toLowerCase().trim()));
-    }
+    if (filterBhk) listings = listings.filter(item => item.bhk && item.bhk.toLowerCase().trim() === filterBhk.toLowerCase().trim());
+    if (filterLoc && filterLoc.trim() !== '') listings = listings.filter(item => item.location && item.location.toLowerCase().includes(filterLoc.toLowerCase().trim()));
 
     if (listings.length === 0) {
       container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--muted);">No properties match your filter criteria.<br/><br/><button class="btn btn-outline" onclick="resetSearchAndShowAll()">Clear Search & Show All</button></p>';
@@ -429,8 +568,7 @@
   };
 
   window.resetSearchAndShowAll = function() {
-    activeFilterBhk = null;
-    activeFilterLoc = '';
+    activeFilterBhk = null; activeFilterLoc = '';
     const searchInput = document.getElementById('search-location');
     if (searchInput) searchInput.value = '';
     document.querySelectorAll('#bhk-filter .pill').forEach(p => p.classList.remove('selected'));
