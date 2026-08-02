@@ -107,22 +107,18 @@
     backdrop-filter: blur(4px);
     transition: 0.2s;
   }
-  .fav-btn.active {
-    background: #fff;
-  }
+  .fav-btn.active { background: #fff; }
 
   .house-info{padding:18px;display:flex;flex-direction:column;flex-grow:1;}
   .house-info h4{font-size:1.1rem;margin-bottom:6px;color:#fff;}
   .house-info .price{color:var(--gold);font-weight:600;font-size:1.15rem;margin-bottom:6px;}
   .house-info .loc{color:var(--muted);font-size:.85rem;margin-bottom:12px;}
   
-  /* Modal Overlay */
   .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:20px;}
   .modal.active{display:flex;}
   .modal-content{background:var(--card);border:1px solid var(--gold);border-radius:16px;padding:24px;width:100%;max-width:450px;position:relative;}
   .close-modal{position:absolute;top:12px;right:16px;font-size:1.5rem;cursor:pointer;color:var(--muted);}
 
-  /* Booking Item Card */
   .booking-card{background:var(--dark3);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px;margin-bottom:12px;}
   .status-badge{display:inline-block;padding:3px 10px;border-radius:50px;font-size:.75rem;font-weight:600;}
   .status-Pending{background:rgba(201,168,76,.2);color:var(--gold);}
@@ -355,7 +351,6 @@
   let allListings = [];
   let savedHouseIds = JSON.parse(localStorage.getItem('srnest_saved') || '[]');
 
-  // Tab Switcher
   window.switchTab = function(pageNum) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -369,7 +364,7 @@
     window.scrollTo(0,0);
     if(pageNum === 5) loadProperties();
     if(pageNum === 6) renderSavedProperties();
-    if(pageNum === 4) {
+    if(pageNum === 4 && currentUser) {
       loadOwnerRequests();
       loadMyListedHouses();
     }
@@ -379,12 +374,12 @@
     if(currentUser) {
       switchTab(4);
     } else {
-      alert('Please log in first to view your dashboard!');
+      alert('Please log in first!');
       switchTab(8);
     }
   };
 
-  // Auth Listener
+  // Auth Listener: Automatically loads user properties when authentication finishes connecting
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
     if (user) {
@@ -392,6 +387,12 @@
       document.getElementById('auth-logged-in').style.display = 'block';
       document.getElementById('user-display-name').innerText = user.displayName || "SR Nest User";
       document.getElementById('user-display-info').innerText = user.email || "";
+
+      // If active page is owner dashboard, reload it instantly after auth initializes
+      if(document.getElementById('page-4').classList.contains('active')) {
+        loadOwnerRequests();
+        loadMyListedHouses();
+      }
     } else {
       document.getElementById('auth-logged-out').style.display = 'block';
       document.getElementById('auth-logged-in').style.display = 'none';
@@ -413,7 +414,6 @@
     switchTab(1);
   };
 
-  // Booking Modal Controls
   window.openBookingModal = function(houseId, ownerPhone, ownerUid) {
     if(!currentUser) {
       alert('Please log in to book a house visit!');
@@ -429,7 +429,6 @@
     document.getElementById('booking-modal').classList.remove('active');
   };
 
-  // Handle Booking Form Submission
   document.getElementById('booking-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     try {
@@ -452,8 +451,238 @@
     }
   });
 
-  // Load Private Requests for Logged-In Owner ONLY
   async function loadOwnerRequests() {
     const container = document.getElementById('booking-requests-container');
-    if(!currentUser) {
-      container.innerHTML = '<p style="color:var(--muted); font
+    if(!currentUser) return;
+
+    try {
+      const q = query(collection(db, "bookings"), where("ownerUid", "==", currentUser.uid));
+      const querySnapshot = await getDocs(q);
+      let requests = [];
+
+      querySnapshot.forEach(docSnap => {
+        requests.push({ id: docSnap.id, ...docSnap.data() });
+      });
+
+      if(requests.length === 0) {
+        container.innerHTML = '<p style="color:var(--muted); font-size:.9rem;">No booking requests received for your properties yet.</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      requests.forEach(req => {
+        const div = document.createElement('div');
+        div.className = 'booking-card';
+        div.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <strong style="color:#fff;">👤 ${req.tenantName}</strong>
+            <span class="status-badge status-${req.status}">${req.status}</span>
+          </div>
+          <p style="font-size:.85rem; color:var(--muted); margin-bottom:4px;">📞 Phone: <a href="tel:${req.tenantPhone}" style="color:var(--gold);">${req.tenantPhone}</a></p>
+          <p style="font-size:.85rem; color:var(--muted); margin-bottom:12px;">📅 Requested Date: ${req.visitDate}</p>
+          ${req.status === 'Pending' ? `
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-green btn-sm" onclick="updateBookingStatus('${req.id}', 'Accepted', '${req.tenantPhone}')">✅ Accept</button>
+              <button class="btn btn-red btn-sm" onclick="updateBookingStatus('${req.id}', 'Rejected', '${req.tenantPhone}')">❌ Reject</button>
+            </div>
+          ` : ''}
+        `;
+        container.appendChild(div);
+      });
+    } catch(err) {
+      console.error(err);
+      container.innerHTML = '<p style="color:var(--muted); font-size:.9rem;">No booking requests found or building indexes...</p>';
+    }
+  }
+
+  async function loadMyListedHouses() {
+    const container = document.getElementById('my-houses-container');
+    if(!currentUser) return;
+
+    try {
+      const q = query(collection(db, "listings"), where("ownerUid", "==", currentUser.uid));
+      const querySnapshot = await getDocs(q);
+      let myHouses = [];
+
+      querySnapshot.forEach(docSnap => {
+        myHouses.push({ id: docSnap.id, ...docSnap.data() });
+      });
+
+      if(myHouses.length === 0) {
+        container.innerHTML = '<p style="color:var(--muted); font-size:.9rem; grid-column:1/-1;">You have not listed any houses yet.</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      myHouses.forEach((data) => {
+        const card = document.createElement('div');
+        card.className = 'house-card';
+        card.innerHTML = `
+          <div class="house-img-box">
+            <img src="${data.imageUrl || 'https://via.placeholder.com/300x200'}" alt="House"/>
+          </div>
+          <div class="house-info">
+            <h4>${data.bhk || 'Rental Home'}</h4>
+            <div class="price">₹${data.rent}/month</div>
+            <div class="loc">📍 ${data.location}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    } catch(err) {
+      console.error(err);
+      container.innerHTML = '<p style="color:var(--muted); font-size:.9rem; grid-column:1/-1;">No houses listed under your account yet.</p>';
+    }
+  }
+
+  window.updateBookingStatus = async function(bookingId, status, tenantPhone) {
+    try {
+      const bookingRef = doc(db, "bookings", bookingId);
+      await updateDoc(bookingRef, { status: status });
+      alert(`Booking request ${status}!`);
+
+      if(status === 'Accepted') {
+        const msg = encodeURIComponent(`Hi! Your booking request for the house visit on SR Nest has been ACCEPTED by the owner.`);
+        window.open(`https://wa.me/91${tenantPhone}?text=${msg}`, '_blank');
+      }
+      
+      loadOwnerRequests();
+    } catch(err) {
+      alert('Failed to update status: ' + err.message);
+    }
+  };
+
+  window.toggleSaveHouse = function(id) {
+    if(savedHouseIds.includes(id)) {
+      savedHouseIds = savedHouseIds.filter(favId => favId !== id);
+    } else {
+      savedHouseIds.push(id);
+    }
+    localStorage.setItem('srnest_saved', JSON.stringify(savedHouseIds));
+    loadProperties();
+    renderSavedProperties();
+  };
+
+  async function loadProperties() {
+    const container = document.getElementById('homes-container');
+    try {
+      const q = query(collection(db, "listings"));
+      const querySnapshot = await getDocs(q);
+      allListings = [];
+
+      querySnapshot.forEach((docSnap) => {
+        allListings.push({ id: docSnap.id, ...docSnap.data() });
+      });
+
+      if(allListings.length === 0) {
+        container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--muted);">No properties listed yet.</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      allListings.forEach((data) => {
+        const isSaved = savedHouseIds.includes(data.id);
+        const card = document.createElement('div');
+        card.className = 'house-card';
+        card.innerHTML = `
+          <div class="house-img-box">
+            <img src="${data.imageUrl || 'https://via.placeholder.com/300x200'}" alt="House"/>
+            <button class="fav-btn ${isSaved ? 'active' : ''}" onclick="toggleSaveHouse('${data.id}')">
+              ${isSaved ? '❤️' : '🤍'}
+            </button>
+          </div>
+          <div class="house-info">
+            <h4>${data.bhk || 'Rental Home'}</h4>
+            <div class="price">₹${data.rent}/month</div>
+            <div class="loc">📍 ${data.location}</div>
+            <p style="font-size:.8rem; color:var(--muted); margin-bottom:12px;">Owner: ${data.ownerName}</p>
+            <button class="btn btn-gold" style="width:100%; margin-bottom:8px; font-size:.85rem;" onclick="openBookingModal('${data.id}', '${data.phone}', '${data.ownerUid}')">
+              📝 Book House Visit
+            </button>
+            <div style="display:flex; gap:8px;">
+              <a href="tel:${data.phone}" class="btn btn-outline" style="flex:1; padding:6px; font-size:.8rem;">📞 Call</a>
+              <a href="https://wa.me/91${data.phone}" target="_blank" class="btn btn-green" style="flex:1; padding:6px; font-size:.8rem;">💬 WhatsApp</a>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    } catch (err) {
+      container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--red);">Failed to load listings.</p>';
+    }
+  }
+
+  function renderSavedProperties() {
+    const container = document.getElementById('saved-homes-container');
+    const savedList = allListings.filter(item => savedHouseIds.includes(item.id));
+
+    if(savedList.length === 0) {
+      container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--muted);">No saved houses yet. Tap ❤️ on any home to save it!</p>';
+      return;
+    }
+
+    container.innerHTML = '';
+    savedList.forEach((data) => {
+      const card = document.createElement('div');
+      card.className = 'house-card';
+      card.innerHTML = `
+        <div class="house-img-box">
+          <img src="${data.imageUrl || 'https://via.placeholder.com/300x200'}" alt="House"/>
+          <button class="fav-btn active" onclick="toggleSaveHouse('${data.id}')">❤️</button>
+        </div>
+        <div class="house-info">
+          <h4>${data.bhk || 'Rental Home'}</h4>
+          <div class="price">₹${data.rent}/month</div>
+          <div class="loc">📍 ${data.location}</div>
+          <button class="btn btn-gold" style="width:100%; margin-bottom:8px; font-size:.85rem;" onclick="openBookingModal('${data.id}', '${data.phone}', '${data.ownerUid}')">
+            📝 Book House Visit
+          </button>
+          <div style="display:flex; gap:8px;">
+            <a href="tel:${data.phone}" class="btn btn-outline" style="flex:1; padding:6px; font-size:.8rem;">📞 Call</a>
+            <a href="https://wa.me/91${data.phone}" target="_blank" class="btn btn-green" style="flex:1; padding:6px; font-size:.8rem;">💬 WhatsApp</a>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  document.getElementById('property-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('prop-image');
+    if(!fileInput.files[0]) return alert('Please upload a photo!');
+
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.innerText = 'Uploading...';
+    submitBtn.disabled = true;
+
+    const reader = new FileReader();
+    reader.onload = async function(event) {
+      try {
+        await addDoc(collection(db, "listings"), {
+          ownerUid: currentUser.uid,
+          ownerName: document.getElementById('prop-owner').value.trim(),
+          phone: document.getElementById('prop-phone').value.trim(),
+          location: document.getElementById('prop-location').value.trim(),
+          rent: document.getElementById('prop-rent').value.trim(),
+          bhk: document.getElementById('prop-bhk').value,
+          imageUrl: event.target.result,
+          createdAt: new Date().toISOString()
+        });
+        alert('🎉 Property posted successfully!');
+        document.getElementById('property-form').reset();
+        submitBtn.innerText = '💾 Post House for Rent';
+        submitBtn.disabled = false;
+        switchTab(4);
+      } catch (err) {
+        alert('Error posting property: ' + err.message);
+        submitBtn.innerText = '💾 Post House for Rent';
+        submitBtn.disabled = false;
+      }
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+  });
+</script>
+
+</body>
+</html>
