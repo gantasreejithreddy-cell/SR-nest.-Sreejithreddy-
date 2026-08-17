@@ -1,4 +1,3 @@
-
 importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js');
 
@@ -18,10 +17,10 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message: ', payload);
 
-  const notificationTitle = payload.notification.title || "SR Nest Alert";
+  const notificationTitle = payload?.notification?.title || "SR Nest Alert";
   const notificationOptions = {
-    body: payload.notification.body || "New house listing update!",
-    icon: "https://gantasreejithreddy-cell.github.io/SR-nest.-Sreejithreddy-/1785333686872.png"
+    body: payload?.notification?.body || "New house listing update!",
+    icon: "1785333686872.png"
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
