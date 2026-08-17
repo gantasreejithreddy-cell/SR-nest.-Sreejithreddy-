@@ -7,10 +7,11 @@
 <meta name="google-site-verification" content="55STJi9ytAiyID_DaIHX_9DXiMtMOxeTRe63lz3HbS4" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 
-<link rel="icon" type="image/png" sizes="192x192" href="https://gantasreejithreddy-cell.github.io/SR-nest.-Sreejithreddy-/1785333686872.png">
-<link rel="shortcut icon" href="https://gantasreejithreddy-cell.github.io/SR-nest.-Sreejithreddy-/1785333686872.png">
-<link rel="apple-touch-icon" href="https://gantasreejithreddy-cell.github.io/SR-nest.-Sreejithreddy-/1785333686872.png">
-<meta property="og:image" content="https://gantasreejithreddy-cell.github.io/SR-nest.-Sreejithreddy-/1785333686872.png">
+<!-- Updated Favicon / Logo Links -->
+<link rel="icon" type="image/png" sizes="192x192" href="1785333686872.png">
+<link rel="shortcut icon" href="1785333686872.png">
+<link rel="apple-touch-icon" href="1785333686872.png">
+<meta property="og:image" content="1785333686872.png">
 
 <style>
   :root {
@@ -135,7 +136,7 @@
 
 <nav>
   <div class="logo" onclick="switchTab(1)">
-    <img src="https://gantasreejithreddy-cell.github.io/SR-nest.-Sreejithreddy-/1785333686872.png" alt="SR Nest Logo"/>
+    <img src="1785333686872.png" alt="SR Nest Logo"/>
     SR Nest <span>Rental Hub</span>
   </div>
   <button class="btn btn-ghost" style="padding:6px 14px; font-size:.8rem;" onclick="switchTab(7)">Support</button>
@@ -379,7 +380,6 @@
     }
   };
 
-  // Auth Listener: Automatically loads user properties when authentication finishes connecting
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
     if (user) {
@@ -388,7 +388,6 @@
       document.getElementById('user-display-name').innerText = user.displayName || "SR Nest User";
       document.getElementById('user-display-info').innerText = user.email || "";
 
-      // If active page is owner dashboard, reload it instantly after auth initializes
       if(document.getElementById('page-4').classList.contains('active')) {
         loadOwnerRequests();
         loadMyListedHouses();
