@@ -7,7 +7,7 @@
 <meta name="google-site-verification" content="55STJi9ytAiyID_DaIHX_9DXiMtMOxeTRe63lz3HbS4" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 
-<!-- Updated Favicon / Logo Links -->
+<!-- Site Favicon & Search Logo -->
 <link rel="icon" type="image/png" sizes="192x192" href="1785333686872.png">
 <link rel="shortcut icon" href="1785333686872.png">
 <link rel="apple-touch-icon" href="1785333686872.png">
@@ -347,6 +347,17 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const auth = getAuth(app);
+
+  // Register FCM Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('firebase-messaging-sw.js')
+      .then((registration) => {
+        console.log('FCM Service Worker registered:', registration.scope);
+      })
+      .catch((err) => {
+        console.error('Service Worker registration failed:', err);
+      });
+  }
 
   let currentUser = null;
   let allListings = [];
