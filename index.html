@@ -334,6 +334,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAtTHJpBv9WcG3M_b_r1VavxgPgqPHnljE",
@@ -347,15 +348,31 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const auth = getAuth(app);
+  const messaging = getMessaging(app);
 
-  // Register FCM Service Worker
+  // Register FCM Service Worker & Get Device Token
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('firebase-messaging-sw.js')
       .then((registration) => {
         console.log('FCM Service Worker registered:', registration.scope);
+        
+        // Request Notification Permission and register Device Token
+        return Notification.requestPermission();
+      })
+      .then((permission) => {
+        if (permission === 'granted') {
+          return getToken(messaging, { 
+            vapidKey: 'PASTE_YOUR_VAPID_KEY_HERE' 
+          });
+        }
+      })
+      .then((token) => {
+        if (token) {
+          console.log('FCM Device Registered Token:', token);
+        }
       })
       .catch((err) => {
-        console.error('Service Worker registration failed:', err);
+        console.error('Service Worker or Token registration failed:', err);
       });
   }
 
