@@ -608,7 +608,7 @@
   </div>
 </div>
 
-<!-- Leaflet JavaScript Library for Interactive Maps -->
+<!-- Leaflet JavaScript Library -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script type="module">
@@ -641,10 +641,53 @@
   let allListings = [];
   let savedHouseIds = JSON.parse(localStorage.getItem('srnest_saved') || '[]');
 
-  // Initialize Map for Property Posting
+  // Initialize History State on Page Load
+  history.replaceState({ pageNum: 1 }, '', '');
+
+  function renderTabUI(pageNum) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    
+    const targetPage = document.getElementById(`page-${pageNum}`);
+    const targetTab = document.getElementById(`tab-${pageNum}`);
+    
+    if(targetPage) targetPage.classList.add('active');
+    if(targetTab) targetTab.classList.add('active');
+    
+    window.scrollTo(0,0);
+    if(pageNum === 5) loadProperties();
+    if(pageNum === 6) renderSavedProperties();
+    if(pageNum === 4) {
+      setTimeout(() => {
+        initPickerMap();
+        pickerMap.invalidateSize();
+      }, 200);
+      if(currentUser) {
+        loadOwnerRequests();
+        loadMyListedHouses();
+      }
+    }
+  }
+
+  window.switchTab = function(pageNum, isBackAction = false) {
+    if(!isBackAction) {
+      history.pushState({ pageNum: pageNum }, '', '');
+    }
+    renderTabUI(pageNum);
+  };
+
+  // Listen for Browser / Device Back Button Press
+  window.onpopstate = function(event) {
+    if (event.state && event.state.pageNum) {
+      renderTabUI(event.state.pageNum);
+    } else {
+      renderTabUI(1);
+    }
+  };
+
   function initPickerMap() {
     if(pickerMap) return;
-    const defaultLat = 17.3850, defaultLng = 78.4867; // Hyderabad coordinates
+    const defaultLat = 17.3850, defaultLng = 78.4867;
     pickerMap = L.map('picker-map').setView([defaultLat, defaultLng], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(pickerMap);
 
@@ -676,31 +719,6 @@
         document.getElementById('prop-lat').value = lat;
         document.getElementById('prop-lng').value = lng;
       });
-    }
-  };
-
-  window.switchTab = function(pageNum) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    
-    const targetPage = document.getElementById(`page-${pageNum}`);
-    const targetTab = document.getElementById(`tab-${pageNum}`);
-    
-    if(targetPage) targetPage.classList.add('active');
-    if(targetTab) targetTab.classList.add('active');
-    
-    window.scrollTo(0,0);
-    if(pageNum === 5) loadProperties();
-    if(pageNum === 6) renderSavedProperties();
-    if(pageNum === 4) {
-      setTimeout(() => {
-        initPickerMap();
-        pickerMap.invalidateSize();
-      }, 200);
-      if(currentUser) {
-        loadOwnerRequests();
-        loadMyListedHouses();
-      }
     }
   };
 
@@ -1077,4 +1095,3 @@
 
 </body>
 </html>
-        
