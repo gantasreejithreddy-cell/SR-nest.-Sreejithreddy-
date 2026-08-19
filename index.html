@@ -13,6 +13,10 @@
 <link rel="apple-touch-icon" href="1785333686872.png">
 <meta property="og:image" content="1785333686872.png">
 
+<!-- PWA Manifest Link for Chrome Install Option -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0E1117">
+
 <style>
   :root {
     --gold:#C9A84C; --gold-light:#F0D080; --dark:#0E1117; --dark2:#161B27;
@@ -350,29 +354,25 @@
   const auth = getAuth(app);
   const messaging = getMessaging(app);
 
-  // Register FCM Service Worker & Get Device Token
+  // Register Service Worker & Register FCM Push Token
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('firebase-messaging-sw.js')
       .then((registration) => {
         console.log('FCM Service Worker registered:', registration.scope);
-        
-        // Request Notification Permission and register Device Token
         return Notification.requestPermission();
       })
       .then((permission) => {
         if (permission === 'granted') {
-          return getToken(messaging, { 
-            vapidKey: 'PASTE_YOUR_VAPID_KEY_HERE' 
-          });
+          return getToken(messaging);
         }
       })
       .then((token) => {
         if (token) {
-          console.log('FCM Device Registered Token:', token);
+          console.log('FCM Device Token:', token);
         }
       })
       .catch((err) => {
-        console.error('Service Worker or Token registration failed:', err);
+        console.error('Service Worker registration failed:', err);
       });
   }
 
