@@ -6,8 +6,9 @@
 <title>SR Nest – Find Your Perfect Home</title>
 <meta name="google-site-verification" content="55STJi9ytAiyID_DaIHX_9DXiMtMOxeTRe63lz3HbS4" />
 
-<!-- Fonts & Styles -->
+<!-- Fonts, Styles & Leaflet Map CSS -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <!-- Site Favicon & Search Logo -->
 <link rel="icon" type="image/png" sizes="192x192" href="1785333686872.png">
@@ -15,7 +16,7 @@
 <link rel="apple-touch-icon" href="1785333686872.png">
 <meta property="og:image" content="1785333686872.png">
 
-<!-- PWA Manifest Link for Chrome Install Option -->
+<!-- PWA Manifest Link -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#4F46E5">
 
@@ -137,13 +138,8 @@
     transition: transform 0.2s ease;
   }
 
-  .nav-item.active {
-    color: #38BDF8;
-  }
-
-  .nav-item.active span.icon {
-    transform: translateY(-2px) scale(1.1);
-  }
+  .nav-item.active { color: #38BDF8; }
+  .nav-item.active span.icon { transform: translateY(-2px) scale(1.1); }
 
   /* Buttons */
   .btn {
@@ -251,6 +247,7 @@
     flex-direction: column;
     position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
   }
 
   .house-card:hover {
@@ -287,6 +284,7 @@
     font-size: 1.2rem;
     backdrop-filter: blur(8px);
     transition: all 0.2s ease;
+    z-index: 10;
   }
 
   .fav-btn.active { background: #FFF; }
@@ -300,7 +298,7 @@
   .form-wrap { max-width: 600px; margin: 0 auto; }
   .form-group { margin-bottom: 20px; }
   label { display: block; font-size: 0.85rem; font-weight: 700; color: #38BDF8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-  input, select {
+  input, select, textarea {
     width: 100%;
     background: rgba(15, 23, 42, 0.6);
     border: 1.5px solid var(--card-border);
@@ -312,7 +310,7 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     transition: border-color 0.2s ease;
   }
-  input:focus, select:focus { border-color: #6366F1; }
+  input:focus, select:focus, textarea:focus { border-color: #6366F1; }
 
   /* Modal */
   .modal {
@@ -331,13 +329,43 @@
     background: #1E293B;
     border: 1px solid var(--card-border);
     border-radius: 24px;
-    padding: 30px;
+    padding: 28px;
     width: 100%;
-    max-width: 480px;
+    max-width: 550px;
+    max-height: 90vh;
+    overflow-y: auto;
     position: relative;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   }
   .close-modal { position: absolute; top: 16px; right: 20px; font-size: 1.8rem; cursor: pointer; color: var(--text-muted); }
+
+  /* Map Container */
+  .map-box {
+    width: 100%;
+    height: 200px;
+    border-radius: 16px;
+    border: 1px solid var(--card-border);
+    margin-top: 10px;
+    z-index: 1;
+  }
+
+  .gallery-preview {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    margin-bottom: 16px;
+  }
+  .gallery-preview img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  .gallery-preview img.active-thumb {
+    border-color: #38BDF8;
+  }
 
   .page-header { padding: 32px 20px 16px; text-align: center; }
   .page-header h2 { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #FFF, #38BDF8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -366,13 +394,13 @@
       <button class="btn btn-ghost btn-lg" onclick="checkAuthAndGoList()">🏡 Post Property</button>
     </div>
   </div>
-  <footer>© 2026 SR Nest · Designed & Built by Sreejith Reddy</footer>
+  <footer>© 2026 SR Nest · Developed by Sreejith Reddy</footer>
 </div>
 
 <div class="page" id="page-5">
   <div class="page-header">
     <h2>Available Homes</h2>
-    <p style="color: var(--text-muted);">Request house visits directly from property owners!</p>
+    <p style="color: var(--text-muted);">Tap any house to view location maps and full property details!</p>
   </div>
   <div style="padding: 0 20px 30px;">
     <div class="house-grid" id="homes-container">
@@ -396,7 +424,7 @@
 <div class="page" id="page-4">
   <div class="page-header">
     <h2>Owner Dashboard</h2>
-    <p style="color: var(--text-muted);">Manage your property listings and booking requests.</p>
+    <p style="color: var(--text-muted);">Manage your property listings and map location pin.</p>
   </div>
   <div style="padding: 0 20px 30px; max-width: 800px; margin: 0 auto;">
     
@@ -447,8 +475,19 @@
           </select>
         </div>
         <div class="form-group">
-          <label>📸 Upload Property Image</label>
-          <input type="file" id="prop-image" accept="image/*" required />
+          <label>Full Description & Amenities</label>
+          <textarea id="prop-desc" rows="3" placeholder="e.g. 24/7 Water supply, Car parking, Balcony view, Semi-furnished."></textarea>
+        </div>
+        <div class="form-group">
+          <label>📸 Upload Property Images (Up to 3)</label>
+          <input type="file" id="prop-images" accept="image/*" multiple required />
+        </div>
+        <div class="form-group">
+          <label>📍 Pin Location on Map (Tap map to set pin)</label>
+          <button type="button" class="btn btn-ghost btn-sm" style="margin-bottom: 8px;" onclick="getCurrentGPSLocation()">🎯 Use My Current Location</button>
+          <div id="picker-map" class="map-box"></div>
+          <input type="hidden" id="prop-lat"/>
+          <input type="hidden" id="prop-lng"/>
         </div>
         <button type="submit" id="submit-btn" class="btn btn-gradient btn-lg" style="width: 100%; margin-top: 10px;">💾 Publish Listing</button>
       </form>
@@ -495,6 +534,32 @@
   </div>
 </div>
 
+<!-- Detailed House View Modal -->
+<div class="modal" id="details-modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeDetailsModal()">&times;</span>
+    <div class="house-img-box" style="height:240px; border-radius:16px; margin-bottom:12px;">
+      <img id="detail-main-img" src="" alt="House Image"/>
+    </div>
+    <div class="gallery-preview" id="detail-gallery"></div>
+    
+    <h3 id="detail-title" style="color:#FFF; font-size:1.4rem; margin-bottom:4px;">1 BHK</h3>
+    <div id="detail-price" style="color:#38BDF8; font-weight:800; font-size:1.3rem; margin-bottom:8px;">₹0/month</div>
+    <p id="detail-loc" style="color:var(--text-muted); font-size:0.95rem; margin-bottom:12px;">📍 Location</p>
+    <p id="detail-desc" style="color:#CBD5E1; font-size:0.9rem; line-height:1.5; margin-bottom:16px;">Description...</p>
+
+    <h4 style="color:#38BDF8; font-size:1rem; margin-bottom:8px;">📍 Property Map Location</h4>
+    <div id="detail-map" class="map-box" style="margin-bottom:20px;"></div>
+
+    <button id="detail-book-btn" class="btn btn-gradient" style="width:100%; margin-bottom:10px;">📝 Book Visit</button>
+    <div style="display:flex; gap:10px;">
+      <a id="detail-call-btn" href="#" class="btn btn-ghost" style="flex:1;">📞 Call</a>
+      <a id="detail-wa-btn" href="#" target="_blank" class="btn btn-green" style="flex:1;">💬 WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Form Modal -->
 <div class="modal" id="booking-modal">
   <div class="modal-content">
     <span class="close-modal" onclick="closeBookingModal()">&times;</span>
@@ -543,6 +608,9 @@
   </div>
 </div>
 
+<!-- Leaflet JavaScript Library for Interactive Maps -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -563,29 +631,53 @@
   const auth = getAuth(app);
   const messaging = getMessaging(app);
 
+  let pickerMap, detailMap, pickerMarker, detailMarker;
+
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('firebase-messaging-sw.js')
-      .then((registration) => {
-        return Notification.requestPermission();
-      })
-      .then((permission) => {
-        if (permission === 'granted') {
-          return getToken(messaging);
-        }
-      })
-      .then((token) => {
-        if (token) {
-          console.log('FCM Device Token:', token);
-        }
-      })
-      .catch((err) => {
-        console.error('Service Worker registration failed:', err);
-      });
+    navigator.serviceWorker.register('firebase-messaging-sw.js').catch(err => console.error(err));
   }
 
   let currentUser = null;
   let allListings = [];
   let savedHouseIds = JSON.parse(localStorage.getItem('srnest_saved') || '[]');
+
+  // Initialize Map for Property Posting
+  function initPickerMap() {
+    if(pickerMap) return;
+    const defaultLat = 17.3850, defaultLng = 78.4867; // Hyderabad coordinates
+    pickerMap = L.map('picker-map').setView([defaultLat, defaultLng], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(pickerMap);
+
+    pickerMarker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(pickerMap);
+    
+    document.getElementById('prop-lat').value = defaultLat;
+    document.getElementById('prop-lng').value = defaultLng;
+
+    pickerMap.on('click', (e) => {
+      pickerMarker.setLatLng(e.latlng);
+      document.getElementById('prop-lat').value = e.latlng.lat;
+      document.getElementById('prop-lng').value = e.latlng.lng;
+    });
+
+    pickerMarker.on('dragend', () => {
+      const position = pickerMarker.getLatLng();
+      document.getElementById('prop-lat').value = position.lat;
+      document.getElementById('prop-lng').value = position.lng;
+    });
+  }
+
+  window.getCurrentGPSLocation = function() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        pickerMap.setView([lat, lng], 15);
+        pickerMarker.setLatLng([lat, lng]);
+        document.getElementById('prop-lat').value = lat;
+        document.getElementById('prop-lng').value = lng;
+      });
+    }
+  };
 
   window.switchTab = function(pageNum) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -600,9 +692,15 @@
     window.scrollTo(0,0);
     if(pageNum === 5) loadProperties();
     if(pageNum === 6) renderSavedProperties();
-    if(pageNum === 4 && currentUser) {
-      loadOwnerRequests();
-      loadMyListedHouses();
+    if(pageNum === 4) {
+      setTimeout(() => {
+        initPickerMap();
+        pickerMap.invalidateSize();
+      }, 200);
+      if(currentUser) {
+        loadOwnerRequests();
+        loadMyListedHouses();
+      }
     }
   };
 
@@ -646,6 +744,62 @@
   window.logoutUser = async function() {
     await signOut(auth);
     switchTab(1);
+  };
+
+  window.openDetailsModal = function(id) {
+    const data = allListings.find(item => item.id === id);
+    if(!data) return;
+
+    const images = data.imageUrls || [data.imageUrl || 'https://via.placeholder.com/300x200'];
+    const mainImg = document.getElementById('detail-main-img');
+    mainImg.src = images[0];
+
+    const galleryBox = document.getElementById('detail-gallery');
+    galleryBox.innerHTML = '';
+    images.forEach((imgUrl, idx) => {
+      const thumb = document.createElement('img');
+      thumb.src = imgUrl;
+      if(idx === 0) thumb.classList.add('active-thumb');
+      thumb.onclick = () => {
+        mainImg.src = imgUrl;
+        document.querySelectorAll('.gallery-preview img').forEach(t => t.classList.remove('active-thumb'));
+        thumb.classList.add('active-thumb');
+      };
+      galleryBox.appendChild(thumb);
+    });
+
+    document.getElementById('detail-title').innerText = data.bhk || 'Rental Home';
+    document.getElementById('detail-price').innerText = `₹${data.rent}/month`;
+    document.getElementById('detail-loc').innerText = `📍 ${data.location}`;
+    document.getElementById('detail-desc').innerText = data.description || 'No description provided by owner.';
+
+    document.getElementById('detail-call-btn').href = `tel:${data.phone}`;
+    document.getElementById('detail-wa-btn').href = `https://wa.me/91${data.phone}?text=${encodeURIComponent(`Hi! I am interested in your ${data.bhk} in ${data.location} listed on SR Nest.`)}`;
+    
+    document.getElementById('detail-book-btn').onclick = () => {
+      closeDetailsModal();
+      openBookingModal(data.id, data.phone, data.ownerUid);
+    };
+
+    document.getElementById('details-modal').classList.add('active');
+
+    setTimeout(() => {
+      const lat = data.lat || 17.3850;
+      const lng = data.lng || 78.4867;
+      if(!detailMap) {
+        detailMap = L.map('detail-map').setView([lat, lng], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(detailMap);
+        detailMarker = L.marker([lat, lng]).addTo(detailMap);
+      } else {
+        detailMap.setView([lat, lng], 15);
+        detailMarker.setLatLng([lat, lng]);
+      }
+      detailMap.invalidateSize();
+    }, 200);
+  };
+
+  window.closeDetailsModal = function() {
+    document.getElementById('details-modal').classList.remove('active');
   };
 
   window.openBookingModal = function(houseId, ownerPhone, ownerUid) {
@@ -694,9 +848,7 @@
       const querySnapshot = await getDocs(q);
       let requests = [];
 
-      querySnapshot.forEach(docSnap => {
-        requests.push({ id: docSnap.id, ...docSnap.data() });
-      });
+      querySnapshot.forEach(docSnap => requests.push({ id: docSnap.id, ...docSnap.data() }));
 
       if(requests.length === 0) {
         container.innerHTML = '<p style="color:var(--text-muted);">No booking requests received for your properties yet.</p>';
@@ -737,9 +889,7 @@
       const querySnapshot = await getDocs(q);
       let myHouses = [];
 
-      querySnapshot.forEach(docSnap => {
-        myHouses.push({ id: docSnap.id, ...docSnap.data() });
-      });
+      querySnapshot.forEach(docSnap => myHouses.push({ id: docSnap.id, ...docSnap.data() }));
 
       if(myHouses.length === 0) {
         container.innerHTML = '<p style="color:var(--text-muted); grid-column:1/-1;">You have not listed any houses yet.</p>';
@@ -750,9 +900,11 @@
       myHouses.forEach((data) => {
         const card = document.createElement('div');
         card.className = 'house-card';
+        card.onclick = () => openDetailsModal(data.id);
+        const displayImg = (data.imageUrls && data.imageUrls[0]) || data.imageUrl || 'https://via.placeholder.com/300x200';
         card.innerHTML = `
           <div class="house-img-box">
-            <img src="${data.imageUrl || 'https://via.placeholder.com/300x200'}" alt="House"/>
+            <img src="${displayImg}" alt="House"/>
           </div>
           <div class="house-info">
             <h4>${data.bhk || 'Rental Home'}</h4>
@@ -784,7 +936,8 @@
     }
   };
 
-  window.toggleSaveHouse = function(id) {
+  window.toggleSaveHouse = function(id, event) {
+    if(event) event.stopPropagation();
     if(savedHouseIds.includes(id)) {
       savedHouseIds = savedHouseIds.filter(favId => favId !== id);
     } else {
@@ -802,9 +955,7 @@
       const querySnapshot = await getDocs(q);
       allListings = [];
 
-      querySnapshot.forEach((docSnap) => {
-        allListings.push({ id: docSnap.id, ...docSnap.data() });
-      });
+      querySnapshot.forEach((docSnap) => allListings.push({ id: docSnap.id, ...docSnap.data() }));
 
       if(allListings.length === 0) {
         container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">No properties listed yet.</p>';
@@ -816,10 +967,13 @@
         const isSaved = savedHouseIds.includes(data.id);
         const card = document.createElement('div');
         card.className = 'house-card';
+        card.onclick = () => openDetailsModal(data.id);
+        const displayImg = (data.imageUrls && data.imageUrls[0]) || data.imageUrl || 'https://via.placeholder.com/300x200';
+
         card.innerHTML = `
           <div class="house-img-box">
-            <img src="${data.imageUrl || 'https://via.placeholder.com/300x200'}" alt="House"/>
-            <button class="fav-btn ${isSaved ? 'active' : ''}" onclick="toggleSaveHouse('${data.id}')">
+            <img src="${displayImg}" alt="House"/>
+            <button class="fav-btn ${isSaved ? 'active' : ''}" onclick="toggleSaveHouse('${data.id}', event)">
               ${isSaved ? '❤️' : '🤍'}
             </button>
           </div>
@@ -827,14 +981,9 @@
             <h4>${data.bhk || 'Rental Home'}</h4>
             <div class="price">₹${data.rent}/month</div>
             <div class="loc">📍 ${data.location}</div>
-            <p style="font-size:.85rem; color:var(--text-muted); margin-bottom:14px;">Owner: ${data.ownerName}</p>
-            <button class="btn btn-gradient" style="width:100%; margin-bottom:10px; font-size:.9rem;" onclick="openBookingModal('${data.id}', '${data.phone}', '${data.ownerUid}')">
-              📝 Book Visit
+            <button class="btn btn-gradient" style="width:100%; font-size:.9rem;">
+              👁️ View Details & Map
             </button>
-            <div style="display:flex; gap:10px;">
-              <a href="tel:${data.phone}" class="btn btn-ghost" style="flex:1; padding:8px; font-size:.85rem;">📞 Call</a>
-              <a href="https://wa.me/91${data.phone}" target="_blank" class="btn btn-green" style="flex:1; padding:8px; font-size:.85rem;">💬 WhatsApp</a>
-            </div>
           </div>
         `;
         container.appendChild(card);
@@ -857,22 +1006,21 @@
     savedList.forEach((data) => {
       const card = document.createElement('div');
       card.className = 'house-card';
+      card.onclick = () => openDetailsModal(data.id);
+      const displayImg = (data.imageUrls && data.imageUrls[0]) || data.imageUrl || 'https://via.placeholder.com/300x200';
+
       card.innerHTML = `
         <div class="house-img-box">
-          <img src="${data.imageUrl || 'https://via.placeholder.com/300x200'}" alt="House"/>
-          <button class="fav-btn active" onclick="toggleSaveHouse('${data.id}')">❤️</button>
+          <img src="${displayImg}" alt="House"/>
+          <button class="fav-btn active" onclick="toggleSaveHouse('${data.id}', event)">❤️</button>
         </div>
         <div class="house-info">
           <h4>${data.bhk || 'Rental Home'}</h4>
           <div class="price">₹${data.rent}/month</div>
           <div class="loc">📍 ${data.location}</div>
-          <button class="btn btn-gradient" style="width:100%; margin-bottom:10px; font-size:.9rem;" onclick="openBookingModal('${data.id}', '${data.phone}', '${data.ownerUid}')">
-            📝 Book Visit
+          <button class="btn btn-gradient" style="width:100%; font-size:.9rem;">
+            👁️ View Details & Map
           </button>
-          <div style="display:flex; gap:10px;">
-            <a href="tel:${data.phone}" class="btn btn-ghost" style="flex:1; padding:8px; font-size:.85rem;">📞 Call</a>
-            <a href="https://wa.me/91${data.phone}" target="_blank" class="btn btn-green" style="flex:1; padding:8px; font-size:.85rem;">💬 WhatsApp</a>
-          </div>
         </div>
       `;
       container.appendChild(card);
@@ -881,40 +1029,52 @@
 
   document.getElementById('property-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const fileInput = document.getElementById('prop-image');
-    if(!fileInput.files[0]) return alert('Please upload a photo!');
+    const fileInput = document.getElementById('prop-images');
+    if(!fileInput.files.length) return alert('Please upload at least one photo!');
 
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.innerText = 'Uploading...';
     submitBtn.disabled = true;
 
-    const reader = new FileReader();
-    reader.onload = async function(event) {
-      try {
-        await addDoc(collection(db, "listings"), {
-          ownerUid: currentUser.uid,
-          ownerName: document.getElementById('prop-owner').value.trim(),
-          phone: document.getElementById('prop-phone').value.trim(),
-          location: document.getElementById('prop-location').value.trim(),
-          rent: document.getElementById('prop-rent').value.trim(),
-          bhk: document.getElementById('prop-bhk').value,
-          imageUrl: event.target.result,
-          createdAt: new Date().toISOString()
-        });
-        alert('🎉 Property posted successfully!');
-        document.getElementById('property-form').reset();
-        submitBtn.innerText = '💾 Publish Listing';
-        submitBtn.disabled = false;
-        switchTab(4);
-      } catch (err) {
-        alert('Error posting property: ' + err.message);
-        submitBtn.innerText = '💾 Publish Listing';
-        submitBtn.disabled = false;
-      }
-    };
-    reader.readAsDataURL(fileInput.files[0]);
+    const imageUrls = [];
+    const files = Array.from(fileInput.files).slice(0, 3);
+
+    for (let file of files) {
+      const base64 = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+      imageUrls.push(base64);
+    }
+
+    try {
+      await addDoc(collection(db, "listings"), {
+        ownerUid: currentUser.uid,
+        ownerName: document.getElementById('prop-owner').value.trim(),
+        phone: document.getElementById('prop-phone').value.trim(),
+        location: document.getElementById('prop-location').value.trim(),
+        rent: document.getElementById('prop-rent').value.trim(),
+        bhk: document.getElementById('prop-bhk').value,
+        description: document.getElementById('prop-desc').value.trim(),
+        lat: parseFloat(document.getElementById('prop-lat').value) || 17.3850,
+        lng: parseFloat(document.getElementById('prop-lng').value) || 78.4867,
+        imageUrls: imageUrls,
+        createdAt: new Date().toISOString()
+      });
+      alert('🎉 Property published with map pin successfully!');
+      document.getElementById('property-form').reset();
+      submitBtn.innerText = '💾 Publish Listing';
+      submitBtn.disabled = false;
+      switchTab(4);
+    } catch (err) {
+      alert('Error posting property: ' + err.message);
+      submitBtn.innerText = '💾 Publish Listing';
+      submitBtn.disabled = false;
+    }
   });
 </script>
 
 </body>
 </html>
+        
