@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>SR Nest – Find Your Perfect Home</title>
 <meta name="google-site-verification" content="55STJi9ytAiyID_DaIHX_9DXiMtMOxeTRe63lz3HbS4" />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+<!-- Fonts & Styles -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 
 <!-- Site Favicon & Search Logo -->
 <link rel="icon" type="image/png" sizes="192x192" href="1785333686872.png">
@@ -15,125 +17,332 @@
 
 <!-- PWA Manifest Link for Chrome Install Option -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0E1117">
+<meta name="theme-color" content="#4F46E5">
 
 <style>
   :root {
-    --gold:#C9A84C; --gold-light:#F0D080; --dark:#0E1117; --dark2:#161B27;
-    --dark3:#1E2535; --card:#1A2030; --text:#E8E8F0; --muted:#8A8FA8;
-    --green:#2ECC8A; --red:#E85D5D; --radius:16px;
+    --primary: #6366F1;
+    --primary-gradient: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
+    --accent-gradient: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    --green-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    --bg-dark: #0F172A;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --text-light: #F8FAFC;
+    --text-muted: #94A3B8;
+    --radius: 20px;
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;padding-bottom:70px;overflow-x:hidden;}
-  .page{display:none;min-height:calc(100vh - 130px);animation:fadeIn .3s ease;}
-  .page.active{display:block;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-  
-  /* Top Header Nav */
-  nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(14,17,23,.95);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(201,168,76,.18);}
-  .logo{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold);letter-spacing:1px;cursor:pointer;display:flex;align-items:center;gap:10px;}
-  .logo img{width:32px;height:32px;border-radius:50%;object-fit:cover;}
-  .logo span{color:var(--text);font-size:.85rem;font-family:'DM Sans',sans-serif;font-weight:300;}
 
-  /* Bottom Navigation Bar */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg-dark);
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.25) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.2) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-light);
+    min-height: 100vh;
+    padding-bottom: 80px;
+    overflow-x: hidden;
+  }
+
+  .page {
+    display: none;
+    min-height: calc(100vh - 140px);
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .page.active { display: block; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Header Bar */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .logo {
+    font-size: 1.3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #38BDF8, #818CF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo img {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  }
+
+  .logo span {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    -webkit-text-fill-color: var(--text-muted);
+  }
+
+  /* Bottom Navigation */
   .bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 65px;
-    background: var(--dark2);
-    border-top: 1px solid rgba(201,168,76,.2);
+    height: 70px;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--card-border);
     display: flex;
     justify-content: space-around;
     align-items: center;
     z-index: 1000;
   }
+
   .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: var(--muted);
-    font-size: 0.72rem;
-    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
     cursor: pointer;
     flex: 1;
     height: 100%;
-    transition: 0.2s;
-  }
-  .nav-item span.icon {
-    font-size: 1.3rem;
-    margin-bottom: 2px;
-  }
-  .nav-item.active {
-    color: var(--gold);
-    font-weight: 600;
+    transition: all 0.2s ease;
   }
 
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:50px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:500;transition:.2s;text-decoration:none;}
-  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0E1117;}
-  .btn-outline{background:transparent;border:1.5px solid var(--gold);color:var(--gold);}
-  .btn-ghost{background:rgba(255,255,255,.07);color:var(--text);border:1.5px solid rgba(255,255,255,.12);}
-  .btn-green{background:linear-gradient(135deg,#2ECC8A,#26B579);color:#0E1117;}
-  .btn-red{background:rgba(232,93,93,.15);border:1px solid var(--red);color:var(--red);}
-  .btn-lg{padding:14px 32px;font-size:1rem;}
-  .btn-sm{padding:6px 12px;font-size:.8rem;border-radius:8px;}
-  
-  .hero{min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,.12) 0%,transparent 70%),var(--dark);}
-  .hero-badge{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:6px 16px;border-radius:50px;font-size:.8rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px;}
-  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,6vw,3.5rem);line-height:1.15;margin-bottom:16px;background:linear-gradient(135deg,#fff 30%,var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .hero p{font-size:1rem;color:var(--muted);max-width:540px;line-height:1.6;margin-bottom:24px;}
-  
-  .form-wrap{max-width:580px;margin:0 auto;}
-  .form-group{margin-bottom:18px;}
-  label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
-  input, select{width:100%;background:var(--dark3);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;color:var(--text);outline:none;font-size:.95rem;}
-  
-  .house-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px;}
-  .house-card{background:var(--card);border-radius:var(--radius);border:1px solid rgba(255,255,255,.08);overflow:hidden;display:flex;flex-direction:column;position:relative;}
-  .house-img-box{height:190px;background:#1E2A3A;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
-  .house-img-box img{width:100%;height:100%;object-fit:cover;}
-  
+  .nav-item span.icon {
+    font-size: 1.4rem;
+    margin-bottom: 3px;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-item.active {
+    color: #38BDF8;
+  }
+
+  .nav-item.active span.icon {
+    transform: translateY(-2px) scale(1.1);
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  .btn:active { transform: scale(0.96); }
+
+  .btn-gradient {
+    background: var(--primary-gradient);
+    color: #FFF;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  }
+
+  .btn-accent {
+    background: var(--accent-gradient);
+    color: #FFF;
+    box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+  }
+
+  .btn-green {
+    background: var(--green-gradient);
+    color: #FFF;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .btn-ghost {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-light);
+    border: 1px solid var(--card-border);
+  }
+
+  .btn-lg { padding: 16px 36px; font-size: 1.05rem; }
+  .btn-sm { padding: 8px 16px; font-size: 0.85rem; border-radius: 12px; }
+
+  /* Hero Section */
+  .hero {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+  }
+
+  .hero-badge {
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    color: #818CF8;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #38BDF8 50%, #A855F7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 580px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  /* Cards Grid */
+  .house-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 24px;
+  }
+
+  .house-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius);
+    border: 1px solid var(--card-border);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .house-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .house-img-box {
+    height: 210px;
+    background: #1E293B;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .house-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .fav-btn {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: rgba(14,17,23,0.7);
-    border: none;
+    top: 14px;
+    right: 14px;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid var(--card-border);
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-size: 1.2rem;
-    backdrop-filter: blur(4px);
-    transition: 0.2s;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
   }
-  .fav-btn.active { background: #fff; }
 
-  .house-info{padding:18px;display:flex;flex-direction:column;flex-grow:1;}
-  .house-info h4{font-size:1.1rem;margin-bottom:6px;color:#fff;}
-  .house-info .price{color:var(--gold);font-weight:600;font-size:1.15rem;margin-bottom:6px;}
-  .house-info .loc{color:var(--muted);font-size:.85rem;margin-bottom:12px;}
-  
-  .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:20px;}
-  .modal.active{display:flex;}
-  .modal-content{background:var(--card);border:1px solid var(--gold);border-radius:16px;padding:24px;width:100%;max-width:450px;position:relative;}
-  .close-modal{position:absolute;top:12px;right:16px;font-size:1.5rem;cursor:pointer;color:var(--muted);}
+  .fav-btn.active { background: #FFF; }
 
-  .booking-card{background:var(--dark3);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px;margin-bottom:12px;}
-  .status-badge{display:inline-block;padding:3px 10px;border-radius:50px;font-size:.75rem;font-weight:600;}
-  .status-Pending{background:rgba(201,168,76,.2);color:var(--gold);}
-  .status-Accepted{background:rgba(46,204,138,.2);color:var(--green);}
-  .status-Rejected{background:rgba(232,93,93,.2);color:var(--red);}
+  .house-info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+  .house-info h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; color: #FFF; }
+  .house-info .price { color: #38BDF8; font-weight: 800; font-size: 1.3rem; margin-bottom: 6px; }
+  .house-info .loc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px; }
 
-  .page-header{padding:24px 20px 12px;text-align:center;}
-  .page-header h2{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold-light);}
-  .contact-box{background:var(--card);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:30px;max-width:500px;margin:20px auto;text-align:center;}
-  footer{text-align:center;padding:20px;color:var(--muted);font-size:.8rem;margin-bottom:60px;}
+  /* Form Elements */
+  .form-wrap { max-width: 600px; margin: 0 auto; }
+  .form-group { margin-bottom: 20px; }
+  label { display: block; font-size: 0.85rem; font-weight: 700; color: #38BDF8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1.5px solid var(--card-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: var(--text-light);
+    outline: none;
+    font-size: 1rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: border-color 0.2s ease;
+  }
+  input:focus, select:focus { border-color: #6366F1; }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal.active { display: flex; }
+  .modal-content {
+    background: #1E293B;
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 30px;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  }
+  .close-modal { position: absolute; top: 16px; right: 20px; font-size: 1.8rem; cursor: pointer; color: var(--text-muted); }
+
+  .page-header { padding: 32px 20px 16px; text-align: center; }
+  .page-header h2 { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #FFF, #38BDF8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .contact-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 36px; max-width: 520px; margin: 20px auto; text-align: center; }
+  footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 60px; }
 </style>
 </head>
 <body>
@@ -143,77 +352,77 @@
     <img src="1785333686872.png" alt="SR Nest Logo"/>
     SR Nest <span>Rental Hub</span>
   </div>
-  <button class="btn btn-ghost" style="padding:6px 14px; font-size:.8rem;" onclick="switchTab(7)">Support</button>
+  <button class="btn btn-ghost btn-sm" onclick="switchTab(7)">Support</button>
 </nav>
 
 <div class="page active" id="page-1">
   <div class="hero">
-    <div class="hero-badge">🏠 India's Trusted Rental Platform</div>
-    <h1>Welcome to<br/>SR Nest</h1>
-    <p style="font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; margin-bottom:12px; color:var(--gold-light);">✨ Designed by Sreejith Reddy ✨</p>
-    <p>Find your perfect rental home or list your property for verified tenants.</p>
-    <div style="display:flex; gap:12px;">
-      <button class="btn btn-gold btn-lg" onclick="switchTab(5)">🔍 Browse Homes</button>
-      <button class="btn btn-outline btn-lg" onclick="checkAuthAndGoList()">🏡 Post Property</button>
+    <div class="hero-badge">✨ Modern Rental Experience</div>
+    <h1>Find Your Perfect<br/>Space With SR Nest</h1>
+    <p style="font-size: 1.1rem; font-weight: 700; color: #38BDF8; margin-bottom: 12px;">Created by Sreejith Reddy</p>
+    <p>Discover verified homes or list your rental property for free.</p>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+      <button class="btn btn-gradient btn-lg" onclick="switchTab(5)">🔍 Browse Homes</button>
+      <button class="btn btn-ghost btn-lg" onclick="checkAuthAndGoList()">🏡 Post Property</button>
     </div>
   </div>
-  <footer>© 2026 SR Nest · Platform Developed by Sreejith Reddy</footer>
+  <footer>© 2026 SR Nest · Designed & Built by Sreejith Reddy</footer>
 </div>
 
 <div class="page" id="page-5">
   <div class="page-header">
-    <h2>Available Homes for Rent</h2>
-    <p>Tap "📝 Book House" to request a visit from the house owner!</p>
+    <h2>Available Homes</h2>
+    <p style="color: var(--text-muted);">Request house visits directly from property owners!</p>
   </div>
-  <div style="padding:0 20px 30px;">
+  <div style="padding: 0 20px 30px;">
     <div class="house-grid" id="homes-container">
-      <p style="text-align:center; grid-column:1/-1; color:var(--muted);">Fetching active listings...</p>
+      <p style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">Fetching active listings...</p>
     </div>
   </div>
 </div>
 
 <div class="page" id="page-6">
   <div class="page-header">
-    <h2>My Saved Houses ❤️</h2>
-    <p>Houses you have bookmarked for quick access.</p>
+    <h2>Saved Properties ❤️</h2>
+    <p style="color: var(--text-muted);">Your bookmarked rental homes.</p>
   </div>
-  <div style="padding:0 20px 30px;">
+  <div style="padding: 0 20px 30px;">
     <div class="house-grid" id="saved-homes-container">
-      <p style="text-align:center; grid-column:1/-1; color:var(--muted);">No saved houses yet. Tap ❤️ on any home to save it!</p>
+      <p style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">No saved houses yet. Tap ❤️ on any home to save it!</p>
     </div>
   </div>
 </div>
 
 <div class="page" id="page-4">
   <div class="page-header">
-    <h2>Owner Dashboard & Requests</h2>
-    <p>Manage your listed properties and private tenant notifications.</p>
+    <h2>Owner Dashboard</h2>
+    <p style="color: var(--text-muted);">Manage your property listings and booking requests.</p>
   </div>
-  <div style="padding:0 20px 30px; max-width:800px; margin:0 auto;">
+  <div style="padding: 0 20px 30px; max-width: 800px; margin: 0 auto;">
     
-    <div style="margin-bottom:30px;">
-      <h3 style="color:var(--gold); margin-bottom:12px; font-size:1.2rem;">🔔 Private Booking Requests</h3>
+    <div style="margin-bottom: 32px;">
+      <h3 style="color: #38BDF8; margin-bottom: 16px; font-size: 1.3rem;">🔔 Booking Requests</h3>
       <div id="booking-requests-container">
-        <p style="color:var(--muted); font-size:.9rem;">Loading tenant requests...</p>
+        <p style="color: var(--text-muted);">Loading tenant requests...</p>
       </div>
     </div>
 
-    <hr style="border-color:rgba(255,255,255,.1); margin-bottom:30px;"/>
+    <hr style="border-color: var(--card-border); margin-bottom: 32px;"/>
 
-    <div style="margin-bottom:30px;">
-      <h3 style="color:var(--gold); margin-bottom:12px; font-size:1.2rem;">🏠 My Listed Houses</h3>
+    <div style="margin-bottom: 32px;">
+      <h3 style="color: #38BDF8; margin-bottom: 16px; font-size: 1.3rem;">🏠 My Listings</h3>
       <div class="house-grid" id="my-houses-container">
-        <p style="color:var(--muted); font-size:.9rem;">Loading your house listings...</p>
+        <p style="color: var(--text-muted);">Loading your house listings...</p>
       </div>
     </div>
 
-    <hr style="border-color:rgba(255,255,255,.1); margin-bottom:30px;"/>
+    <hr style="border-color: var(--card-border); margin-bottom: 32px;"/>
 
-    <h3 style="color:var(--gold); margin-bottom:12px; font-size:1.2rem;">➕ Post a Property Listing</h3>
+    <h3 style="color: #38BDF8; margin-bottom: 16px; font-size: 1.3rem;">➕ Post a Property</h3>
     <div class="form-wrap">
       <form id="property-form">
         <div class="form-group">
-          <label>Owner Full Name</label>
+          <label>Owner Name</label>
           <input type="text" id="prop-owner" required placeholder="e.g. Sreejith Reddy"/>
         </div>
         <div class="form-group">
@@ -238,10 +447,10 @@
           </select>
         </div>
         <div class="form-group">
-          <label>📸 Upload House Image</label>
+          <label>📸 Upload Property Image</label>
           <input type="file" id="prop-image" accept="image/*" required />
         </div>
-        <button type="submit" id="submit-btn" class="btn btn-gold btn-lg" style="width:100%; margin-top:10px;">💾 Post House for Rent</button>
+        <button type="submit" id="submit-btn" class="btn btn-gradient btn-lg" style="width: 100%; margin-top: 10px;">💾 Publish Listing</button>
       </form>
     </div>
 
@@ -250,15 +459,15 @@
 
 <div class="page" id="page-7">
   <div class="page-header">
-    <h2>SR Nest Support</h2>
-    <p>Contact developer & founder Sreejith Reddy.</p>
+    <h2>Contact Support</h2>
+    <p style="color: var(--text-muted);">Reach founder Sreejith Reddy directly.</p>
   </div>
-  <div style="padding:0 20px 30px;">
+  <div style="padding: 0 20px 30px;">
     <div class="contact-box">
-      <div style="font-size:3rem; margin-bottom:12px;">📞</div>
-      <h3 style="color:var(--gold-light); margin-bottom:12px;">Contact Support</h3>
-      <div style="display:flex; flex-direction:column; gap:12px;">
-        <a href="tel:9063576302" class="btn btn-gold btn-lg">📞 Call 9063576302</a>
+      <div style="font-size: 3.5rem; margin-bottom: 16px;">💬</div>
+      <h3 style="color: #FFF; margin-bottom: 20px; font-size: 1.4rem;">Get in Touch</h3>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <a href="tel:9063576302" class="btn btn-gradient btn-lg">📞 Call 9063576302</a>
         <a href="https://wa.me/919063576302" class="btn btn-green btn-lg" target="_blank">💬 WhatsApp 9063576302</a>
       </div>
     </div>
@@ -269,19 +478,19 @@
   <div class="page-header">
     <h2 id="auth-title">User Account</h2>
   </div>
-  <div style="padding:0 20px 30px;">
+  <div style="padding: 0 20px 30px;">
     <div id="auth-logged-out" class="contact-box">
-      <button class="btn btn-ghost btn-lg" style="width:100%; margin-bottom:16px; background:#fff; color:#000;" onclick="loginWithGoogle()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"/> Sign in with Google
+      <button class="btn btn-ghost btn-lg" style="width: 100%; background: #FFF; color: #0F172A;" onclick="loginWithGoogle()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"/> Sign in with Google
       </button>
     </div>
 
-    <div id="auth-logged-in" class="contact-box" style="display:none;">
-      <div style="font-size:3rem; margin-bottom:10px;">👤</div>
-      <h3 id="user-display-name" style="color:var(--gold-light);">Welcome User</h3>
-      <p id="user-display-info" style="color:var(--muted); font-size:.9rem; margin-bottom:20px;"></p>
-      <button class="btn btn-gold btn-lg" style="width:100%; margin-bottom:12px;" onclick="switchTab(4)">🏡 Owner Dashboard</button>
-      <button class="btn btn-red btn-lg" style="width:100%;" onclick="logoutUser()">🚪 Sign Out</button>
+    <div id="auth-logged-in" class="contact-box" style="display: none;">
+      <div style="font-size: 3.5rem; margin-bottom: 12px;">👤</div>
+      <h3 id="user-display-name" style="color: #FFF; font-size: 1.4rem;">Welcome User</h3>
+      <p id="user-display-info" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;"></p>
+      <button class="btn btn-gradient btn-lg" style="width: 100%; margin-bottom: 14px;" onclick="switchTab(4)">🏡 Owner Dashboard</button>
+      <button class="btn btn-accent btn-lg" style="width: 100%;" onclick="logoutUser()">🚪 Sign Out</button>
     </div>
   </div>
 </div>
@@ -289,7 +498,7 @@
 <div class="modal" id="booking-modal">
   <div class="modal-content">
     <span class="close-modal" onclick="closeBookingModal()">&times;</span>
-    <h3 style="color:var(--gold-light); margin-bottom:12px;">📝 Book House Visit</h3>
+    <h3 style="color: #FFF; margin-bottom: 16px; font-size: 1.3rem;">📝 Book House Visit</h3>
     <form id="booking-form">
       <input type="hidden" id="book-house-id"/>
       <input type="hidden" id="book-owner-phone"/>
@@ -299,14 +508,14 @@
         <input type="text" id="tenant-name" required placeholder="e.g. Ramesh Kumar"/>
       </div>
       <div class="form-group">
-        <label>Your Phone Number</label>
+        <label>Phone Number</label>
         <input type="tel" id="tenant-phone" required placeholder="e.g. 9876543210"/>
       </div>
       <div class="form-group">
         <label>Preferred Visit Date</label>
         <input type="date" id="tenant-date" required/>
       </div>
-      <button type="submit" class="btn btn-gold btn-lg" style="width:100%;">🚀 Submit Booking Request</button>
+      <button type="submit" class="btn btn-gradient btn-lg" style="width: 100%;">🚀 Send Request</button>
     </form>
   </div>
 </div>
@@ -326,7 +535,7 @@
   </div>
   <div class="nav-item" id="tab-4" onclick="checkAuthAndGoList()">
     <span class="icon">🏡</span>
-    <span>My Property</span>
+    <span>Property</span>
   </div>
   <div class="nav-item" id="tab-8" onclick="switchTab(8)">
     <span class="icon">👤</span>
@@ -354,11 +563,9 @@
   const auth = getAuth(app);
   const messaging = getMessaging(app);
 
-  // Register Service Worker & Register FCM Push Token
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('firebase-messaging-sw.js')
       .then((registration) => {
-        console.log('FCM Service Worker registered:', registration.scope);
         return Notification.requestPermission();
       })
       .then((permission) => {
@@ -492,33 +699,32 @@
       });
 
       if(requests.length === 0) {
-        container.innerHTML = '<p style="color:var(--muted); font-size:.9rem;">No booking requests received for your properties yet.</p>';
+        container.innerHTML = '<p style="color:var(--text-muted);">No booking requests received for your properties yet.</p>';
         return;
       }
 
       container.innerHTML = '';
       requests.forEach(req => {
         const div = document.createElement('div');
-        div.className = 'booking-card';
+        div.style.cssText = "background: rgba(15, 23, 42, 0.6); border: 1px solid var(--card-border); border-radius: 16px; padding: 18px; margin-bottom: 14px;";
         div.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <strong style="color:#fff;">👤 ${req.tenantName}</strong>
-            <span class="status-badge status-${req.status}">${req.status}</span>
+            <strong style="color:#FFF;">👤 ${req.tenantName}</strong>
+            <span style="background: rgba(99, 102, 241, 0.2); color: #818CF8; padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 700;">${req.status}</span>
           </div>
-          <p style="font-size:.85rem; color:var(--muted); margin-bottom:4px;">📞 Phone: <a href="tel:${req.tenantPhone}" style="color:var(--gold);">${req.tenantPhone}</a></p>
-          <p style="font-size:.85rem; color:var(--muted); margin-bottom:12px;">📅 Requested Date: ${req.visitDate}</p>
+          <p style="font-size:.9rem; color:var(--text-muted); margin-bottom:4px;">📞 Phone: <a href="tel:${req.tenantPhone}" style="color:#38BDF8;">${req.tenantPhone}</a></p>
+          <p style="font-size:.9rem; color:var(--text-muted); margin-bottom:14px;">📅 Requested Date: ${req.visitDate}</p>
           ${req.status === 'Pending' ? `
-            <div style="display:flex; gap:8px;">
+            <div style="display:flex; gap:10px;">
               <button class="btn btn-green btn-sm" onclick="updateBookingStatus('${req.id}', 'Accepted', '${req.tenantPhone}')">✅ Accept</button>
-              <button class="btn btn-red btn-sm" onclick="updateBookingStatus('${req.id}', 'Rejected', '${req.tenantPhone}')">❌ Reject</button>
+              <button class="btn btn-accent btn-sm" onclick="updateBookingStatus('${req.id}', 'Rejected', '${req.tenantPhone}')">❌ Reject</button>
             </div>
           ` : ''}
         `;
         container.appendChild(div);
       });
     } catch(err) {
-      console.error(err);
-      container.innerHTML = '<p style="color:var(--muted); font-size:.9rem;">No booking requests found or building indexes...</p>';
+      container.innerHTML = '<p style="color:var(--text-muted);">No booking requests found.</p>';
     }
   }
 
@@ -536,7 +742,7 @@
       });
 
       if(myHouses.length === 0) {
-        container.innerHTML = '<p style="color:var(--muted); font-size:.9rem; grid-column:1/-1;">You have not listed any houses yet.</p>';
+        container.innerHTML = '<p style="color:var(--text-muted); grid-column:1/-1;">You have not listed any houses yet.</p>';
         return;
       }
 
@@ -557,8 +763,7 @@
         container.appendChild(card);
       });
     } catch(err) {
-      console.error(err);
-      container.innerHTML = '<p style="color:var(--muted); font-size:.9rem; grid-column:1/-1;">No houses listed under your account yet.</p>';
+      container.innerHTML = '<p style="color:var(--text-muted); grid-column:1/-1;">No houses listed under your account yet.</p>';
     }
   }
 
@@ -602,7 +807,7 @@
       });
 
       if(allListings.length === 0) {
-        container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--muted);">No properties listed yet.</p>';
+        container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">No properties listed yet.</p>';
         return;
       }
 
@@ -622,20 +827,20 @@
             <h4>${data.bhk || 'Rental Home'}</h4>
             <div class="price">₹${data.rent}/month</div>
             <div class="loc">📍 ${data.location}</div>
-            <p style="font-size:.8rem; color:var(--muted); margin-bottom:12px;">Owner: ${data.ownerName}</p>
-            <button class="btn btn-gold" style="width:100%; margin-bottom:8px; font-size:.85rem;" onclick="openBookingModal('${data.id}', '${data.phone}', '${data.ownerUid}')">
-              📝 Book House Visit
+            <p style="font-size:.85rem; color:var(--text-muted); margin-bottom:14px;">Owner: ${data.ownerName}</p>
+            <button class="btn btn-gradient" style="width:100%; margin-bottom:10px; font-size:.9rem;" onclick="openBookingModal('${data.id}', '${data.phone}', '${data.ownerUid}')">
+              📝 Book Visit
             </button>
-            <div style="display:flex; gap:8px;">
-              <a href="tel:${data.phone}" class="btn btn-outline" style="flex:1; padding:6px; font-size:.8rem;">📞 Call</a>
-              <a href="https://wa.me/91${data.phone}" target="_blank" class="btn btn-green" style="flex:1; padding:6px; font-size:.8rem;">💬 WhatsApp</a>
+            <div style="display:flex; gap:10px;">
+              <a href="tel:${data.phone}" class="btn btn-ghost" style="flex:1; padding:8px; font-size:.85rem;">📞 Call</a>
+              <a href="https://wa.me/91${data.phone}" target="_blank" class="btn btn-green" style="flex:1; padding:8px; font-size:.85rem;">💬 WhatsApp</a>
             </div>
           </div>
         `;
         container.appendChild(card);
       });
     } catch (err) {
-      container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--red);">Failed to load listings.</p>';
+      container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:#FF6B6B;">Failed to load listings.</p>';
     }
   }
 
@@ -644,7 +849,7 @@
     const savedList = allListings.filter(item => savedHouseIds.includes(item.id));
 
     if(savedList.length === 0) {
-      container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--muted);">No saved houses yet. Tap ❤️ on any home to save it!</p>';
+      container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">No saved houses yet. Tap ❤️ on any home to save it!</p>';
       return;
     }
 
@@ -661,12 +866,12 @@
           <h4>${data.bhk || 'Rental Home'}</h4>
           <div class="price">₹${data.rent}/month</div>
           <div class="loc">📍 ${data.location}</div>
-          <button class="btn btn-gold" style="width:100%; margin-bottom:8px; font-size:.85rem;" onclick="openBookingModal('${data.id}', '${data.phone}', '${data.ownerUid}')">
-            📝 Book House Visit
+          <button class="btn btn-gradient" style="width:100%; margin-bottom:10px; font-size:.9rem;" onclick="openBookingModal('${data.id}', '${data.phone}', '${data.ownerUid}')">
+            📝 Book Visit
           </button>
-          <div style="display:flex; gap:8px;">
-            <a href="tel:${data.phone}" class="btn btn-outline" style="flex:1; padding:6px; font-size:.8rem;">📞 Call</a>
-            <a href="https://wa.me/91${data.phone}" target="_blank" class="btn btn-green" style="flex:1; padding:6px; font-size:.8rem;">💬 WhatsApp</a>
+          <div style="display:flex; gap:10px;">
+            <a href="tel:${data.phone}" class="btn btn-ghost" style="flex:1; padding:8px; font-size:.85rem;">📞 Call</a>
+            <a href="https://wa.me/91${data.phone}" target="_blank" class="btn btn-green" style="flex:1; padding:8px; font-size:.85rem;">💬 WhatsApp</a>
           </div>
         </div>
       `;
@@ -698,12 +903,12 @@
         });
         alert('🎉 Property posted successfully!');
         document.getElementById('property-form').reset();
-        submitBtn.innerText = '💾 Post House for Rent';
+        submitBtn.innerText = '💾 Publish Listing';
         submitBtn.disabled = false;
         switchTab(4);
       } catch (err) {
         alert('Error posting property: ' + err.message);
-        submitBtn.innerText = '💾 Post House for Rent';
+        submitBtn.innerText = '💾 Publish Listing';
         submitBtn.disabled = false;
       }
     };
