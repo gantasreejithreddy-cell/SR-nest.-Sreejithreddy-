@@ -3,1095 +3,1222 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SR Nest – Find Your Perfect Home</title>
-<meta name="google-site-verification" content="55STJi9ytAiyID_DaIHX_9DXiMtMOxeTRe63lz3HbS4" />
+<title>SR Nest | Find Your Perfect Home</title>
 
-<!-- Fonts, Styles & Leaflet Map CSS -->
+<meta name="google-site-verification" content="55STJi9ytAiyID_DaIHX_9DXiMtMOxeTRe63lz3HbS4"/>
+<meta name="theme-color" content="#6366F1"/>
+<meta name="description" content="SR Nest - Find rental homes, save properties and book house visits."/>
+
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
-<!-- Site Favicon & Search Logo -->
-<link rel="icon" type="image/png" sizes="192x192" href="1785333686872.png">
-<link rel="shortcut icon" href="1785333686872.png">
-<link rel="apple-touch-icon" href="1785333686872.png">
-<meta property="og:image" content="1785333686872.png">
+<link rel="icon" type="image/png" sizes="192x192" href="1785333686872.png"/>
+<link rel="shortcut icon" href="1785333686872.png"/>
+<link rel="apple-touch-icon" href="1785333686872.png"/>
+<meta property="og:image" content="1785333686872.png"/>
 
-<!-- PWA Manifest Link -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4F46E5">
+<link rel="manifest" href="manifest.json"/>
 
 <style>
-  :root {
-    --primary: #6366F1;
-    --primary-gradient: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
-    --accent-gradient: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
-    --green-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
-    --bg-dark: #0F172A;
-    --card-bg: rgba(30, 41, 59, 0.7);
-    --card-border: rgba(255, 255, 255, 0.12);
-    --text-light: #F8FAFC;
-    --text-muted: #94A3B8;
-    --radius: 20px;
+:root{
+  --primary:#6366F1;
+  --primary2:#8B5CF6;
+  --blue:#38BDF8;
+  --green:#10B981;
+  --red:#F43F5E;
+  --orange:#F97316;
+  --bg:#070B17;
+  --bg2:#0F172A;
+  --card:rgba(15,23,42,.76);
+  --card2:rgba(30,41,59,.72);
+  --border:rgba(255,255,255,.10);
+  --text:#F8FAFC;
+  --muted:#94A3B8;
+  --radius:22px;
+  --shadow:0 18px 50px rgba(0,0,0,.28);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:
+    radial-gradient(circle at 0% 0%,rgba(99,102,241,.22),transparent 35%),
+    radial-gradient(circle at 100% 30%,rgba(56,189,248,.12),transparent 30%),
+    radial-gradient(circle at 80% 100%,rgba(139,92,246,.18),transparent 35%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--text);
+  min-height:100vh;
+  padding-bottom:88px;
+  overflow-x:hidden;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+}
+
+.page{
+  display:none;
+  min-height:calc(100vh - 80px);
+  animation:pageIn .35s ease;
+}
+
+.page.active{
+  display:block;
+}
+
+@keyframes pageIn{
+  from{
+    opacity:0;
+    transform:translateY(12px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ================= HEADER ================= */
+
+.top-nav{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  height:74px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 24px;
+  background:rgba(7,11,23,.78);
+  backdrop-filter:blur(22px);
+  border-bottom:1px solid var(--border);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  cursor:pointer;
+  user-select:none;
+}
+
+.logo img{
+  width:40px;
+  height:40px;
+  object-fit:cover;
+  border-radius:13px;
+  box-shadow:0 7px 25px rgba(99,102,241,.35);
+}
+
+.logo-main{
+  font-size:1.2rem;
+  font-weight:800;
+  background:linear-gradient(135deg,#38BDF8,#818CF8,#C084FC);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.logo-sub{
+  color:var(--muted);
+  font-size:.68rem;
+  font-weight:600;
+  display:block;
+  margin-top:1px;
+}
+
+/* ================= BUTTONS ================= */
+
+.btn{
+  border:0;
+  border-radius:15px;
+  padding:12px 18px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  color:white;
+  font-weight:700;
+  transition:.22s ease;
+  text-decoration:none;
+  min-height:45px;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+}
+
+.btn:active{
+  transform:scale(.97);
+}
+
+.btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.btn-primary{
+  background:linear-gradient(135deg,#6366F1,#8B5CF6);
+  box-shadow:0 9px 28px rgba(99,102,241,.28);
+}
+
+.btn-blue{
+  background:linear-gradient(135deg,#0284C7,#38BDF8);
+  box-shadow:0 9px 28px rgba(56,189,248,.20);
+}
+
+.btn-green{
+  background:linear-gradient(135deg,#059669,#10B981);
+}
+
+.btn-danger{
+  background:linear-gradient(135deg,#E11D48,#F43F5E);
+}
+
+.btn-ghost{
+  background:rgba(255,255,255,.065);
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+.btn-lg{
+  min-height:54px;
+  padding:15px 25px;
+  border-radius:17px;
+}
+
+.btn-sm{
+  min-height:38px;
+  padding:8px 13px;
+  font-size:.82rem;
+  border-radius:11px;
+}
+
+/* ================= HOME ================= */
+
+.hero{
+  max-width:1150px;
+  margin:auto;
+  min-height:calc(100vh - 74px);
+  padding:70px 22px 45px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:9px 16px;
+  border-radius:999px;
+  background:rgba(99,102,241,.12);
+  border:1px solid rgba(129,140,248,.25);
+  color:#A5B4FC;
+  font-size:.76rem;
+  font-weight:800;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  margin-bottom:23px;
+}
+
+.hero h1{
+  max-width:900px;
+  font-size:clamp(2.45rem,7vw,5.4rem);
+  line-height:1.02;
+  font-weight:800;
+  letter-spacing:-2.8px;
+  background:linear-gradient(135deg,#fff 12%,#38BDF8 48%,#A78BFA 82%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.hero-description{
+  max-width:680px;
+  color:var(--muted);
+  font-size:1.04rem;
+  line-height:1.7;
+  margin:23px auto 30px;
+}
+
+.creator{
+  color:#38BDF8;
+  font-weight:800;
+  margin-top:20px;
+}
+
+.hero-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.hero-stats{
+  width:100%;
+  max-width:700px;
+  margin-top:48px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.stat-card{
+  padding:18px 12px;
+  background:rgba(255,255,255,.045);
+  border:1px solid var(--border);
+  border-radius:18px;
+  backdrop-filter:blur(12px);
+}
+
+.stat-number{
+  font-size:1.35rem;
+  font-weight:800;
+  color:#fff;
+}
+
+.stat-label{
+  font-size:.72rem;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+/* ================= PAGE HEADER ================= */
+
+.page-header{
+  max-width:1150px;
+  margin:auto;
+  padding:38px 20px 20px;
+}
+
+.page-header-inner{
+  text-align:center;
+}
+
+.page-header h2{
+  font-size:clamp(1.8rem,4vw,2.65rem);
+  font-weight:800;
+  background:linear-gradient(135deg,#fff,#38BDF8,#A78BFA);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.page-header p{
+  color:var(--muted);
+  margin-top:9px;
+  font-size:.9rem;
+}
+
+/* ================= FILTERS ================= */
+
+.filter-box{
+  max-width:1150px;
+  margin:10px auto 25px;
+  padding:18px;
+  background:rgba(15,23,42,.72);
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(16px);
+}
+
+.search-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+}
+
+.search-input-wrap{
+  position:relative;
+}
+
+.search-input-wrap span{
+  position:absolute;
+  left:15px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:1.1rem;
+  pointer-events:none;
+}
+
+.search-input{
+  padding-left:45px!important;
+}
+
+.filter-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  margin-top:11px;
+}
+
+.field{
+  min-width:0;
+}
+
+.field label{
+  display:block;
+  color:#7DD3FC;
+  font-size:.67rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  margin:0 0 6px 3px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  border:1px solid var(--border);
+  outline:none;
+  background:rgba(2,6,23,.72);
+  color:var(--text);
+  border-radius:13px;
+  padding:12px 13px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:rgba(99,102,241,.8);
+  box-shadow:0 0 0 3px rgba(99,102,241,.10);
+}
+
+select option{
+  background:#0F172A;
+  color:#fff;
+}
+
+.filter-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+
+.results-count{
+  color:var(--muted);
+  font-size:.82rem;
+}
+
+.results-count strong{
+  color:#fff;
+}
+
+.quick-filters{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.chip{
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.045);
+  color:#CBD5E1;
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:.74rem;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.chip:hover{
+  background:rgba(99,102,241,.18);
+  border-color:rgba(129,140,248,.35);
+}
+
+/* ================= PROPERTY CARDS ================= */
+
+.content-width{
+  max-width:1150px;
+  margin:auto;
+  padding:0 20px 35px;
+}
+
+.house-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(285px,1fr));
+  gap:18px;
+}
+
+.house-card{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(145deg,rgba(30,41,59,.76),rgba(15,23,42,.82));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  cursor:pointer;
+  transition:.28s ease;
+  box-shadow:0 10px 35px rgba(0,0,0,.12);
+}
+
+.house-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(129,140,248,.30);
+  box-shadow:0 20px 50px rgba(0,0,0,.28);
+}
+
+.house-img{
+  height:205px;
+  position:relative;
+  background:#172033;
+  overflow:hidden;
+}
+
+.house-img img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  transition:.4s ease;
+}
+
+.house-card:hover .house-img img{
+  transform:scale(1.035);
+}
+
+.image-count{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  background:rgba(0,0,0,.58);
+  backdrop-filter:blur(8px);
+  padding:6px 9px;
+  border-radius:9px;
+  font-size:.7rem;
+  font-weight:700;
+}
+
+.fav-btn{
+  position:absolute;
+  right:12px;
+  top:12px;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(2,6,23,.62);
+  color:white;
+  font-size:1.2rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:5;
+  backdrop-filter:blur(9px);
+}
+
+.fav-btn.saved{
+  background:#fff;
+}
+
+.card-body{
+  padding:17px;
+}
+
+.card-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.bhk-badge{
+  color:#C4B5FD;
+  background:rgba(139,92,246,.13);
+  border:1px solid rgba(139,92,246,.2);
+  padding:5px 9px;
+  border-radius:8px;
+  font-size:.7rem;
+  font-weight:800;
+}
+
+.card-title{
+  font-size:1.08rem;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.price{
+  color:#38BDF8;
+  font-size:1.25rem;
+  font-weight:800;
+}
+
+.price small{
+  color:var(--muted);
+  font-size:.68rem;
+  font-weight:600;
+}
+
+.location{
+  color:var(--muted);
+  font-size:.79rem;
+  margin:10px 0 14px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.card-actions{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+}
+
+.card-view{
+  width:100%;
+}
+
+.empty-state{
+  grid-column:1/-1;
+  text-align:center;
+  padding:60px 20px;
+  border:1px dashed rgba(255,255,255,.14);
+  border-radius:22px;
+  color:var(--muted);
+}
+
+.empty-icon{
+  font-size:3rem;
+  margin-bottom:12px;
+}
+
+.empty-state h3{
+  color:#fff;
+  margin-bottom:6px;
+}
+
+/* ================= SKELETON ================= */
+
+.skeleton{
+  overflow:hidden;
+  position:relative;
+}
+
+.skeleton::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
+  animation:shine 1.3s infinite;
+}
+
+@keyframes shine{
+  100%{transform:translateX(100%);}
+}
+
+.skeleton-img{
+  height:205px;
+  background:#172033;
+}
+
+.skeleton-body{
+  padding:17px;
+}
+
+.skeleton-line{
+  height:14px;
+  border-radius:7px;
+  background:#1E293B;
+  margin-bottom:10px;
+}
+
+.skeleton-line.short{
+  width:55%;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:3000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background:rgba(2,6,23,.82);
+  backdrop-filter:blur(15px);
+}
+
+.modal.active{
+  display:flex;
+}
+
+.modal-content{
+  width:100%;
+  max-width:650px;
+  max-height:92vh;
+  overflow-y:auto;
+  position:relative;
+  background:#101827;
+  border:1px solid var(--border);
+  border-radius:25px;
+  padding:20px;
+  box-shadow:0 30px 90px rgba(0,0,0,.55);
+}
+
+.modal-close{
+  position:absolute;
+  right:15px;
+  top:13px;
+  z-index:20;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:rgba(2,6,23,.70);
+  color:#fff;
+  font-size:1.45rem;
+}
+
+.detail-main{
+  width:100%;
+  height:310px;
+  border-radius:17px;
+  object-fit:cover;
+  background:#172033;
+}
+
+.gallery{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  margin:10px 0 16px;
+  padding-bottom:3px;
+}
+
+.gallery img{
+  flex:0 0 78px;
+  width:78px;
+  height:60px;
+  border-radius:10px;
+  object-fit:cover;
+  border:2px solid transparent;
+  cursor:pointer;
+}
+
+.gallery img.active{
+  border-color:#38BDF8;
+}
+
+.detail-heading{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.detail-heading h3{
+  font-size:1.5rem;
+}
+
+.detail-location{
+  color:var(--muted);
+  margin:9px 0;
+  font-size:.88rem;
+}
+
+.detail-description{
+  color:#CBD5E1;
+  line-height:1.65;
+  font-size:.9rem;
+  margin:15px 0;
+  white-space:pre-wrap;
+}
+
+.detail-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:15px;
+}
+
+.map-box{
+  width:100%;
+  height:240px;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  margin-top:9px;
+}
+
+/* ================= FORMS ================= */
+
+.form-card{
+  max-width:700px;
+  margin:0 auto;
+  background:rgba(15,23,42,.72);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+
+.form-group{
+  margin-bottom:18px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:7px;
+  color:#7DD3FC;
+  font-size:.72rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+textarea{
+  resize:vertical;
+  min-height:90px;
+}
+
+.file-input{
+  padding:10px;
+}
+
+.file-note{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:.72rem;
+  line-height:1.5;
+}
+
+.map-help{
+  color:var(--muted);
+  font-size:.74rem;
+  margin-top:7px;
+}
+
+/* ================= DASHBOARD ================= */
+
+.dashboard{
+  max-width:1050px;
+  margin:auto;
+  padding:0 20px 40px;
+}
+
+.dashboard-section{
+  margin-bottom:28px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:13px;
+}
+
+.section-title h3{
+  font-size:1.15rem;
+}
+
+.section-title span{
+  color:var(--muted);
+  font-size:.75rem;
+}
+
+.request-card{
+  background:rgba(15,23,42,.75);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:16px;
+  margin-bottom:10px;
+}
+
+.request-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:9px;
+}
+
+.status{
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:.68rem;
+  font-weight:800;
+}
+
+.status.pending{
+  background:rgba(245,158,11,.14);
+  color:#FBBF24;
+}
+
+.status.accepted{
+  background:rgba(16,185,129,.14);
+  color:#34D399;
+}
+
+.status.rejected{
+  background:rgba(244,63,94,.14);
+  color:#FB7185;
+}
+
+.request-info{
+  color:var(--muted);
+  font-size:.78rem;
+  line-height:1.8;
+}
+
+.request-actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.divider{
+  height:1px;
+  background:var(--border);
+  margin:28px 0;
+}
+
+/* ================= PROFILE ================= */
+
+.profile-card{
+  max-width:540px;
+  margin:20px auto;
+  padding:30px 22px;
+  text-align:center;
+  background:rgba(15,23,42,.76);
+  border:1px solid var(--border);
+  border-radius:25px;
+  box-shadow:var(--shadow);
+}
+
+.profile-avatar{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  margin:0 auto 13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:2.3rem;
+  background:linear-gradient(135deg,#6366F1,#38BDF8);
+  box-shadow:0 12px 35px rgba(99,102,241,.28);
+}
+
+/* ================= SUPPORT ================= */
+
+.support-card{
+  max-width:540px;
+  margin:20px auto;
+  text-align:center;
+  padding:35px 23px;
+  background:rgba(15,23,42,.76);
+  border:1px solid var(--border);
+  border-radius:25px;
+}
+
+.support-icon{
+  font-size:3.5rem;
+  margin-bottom:13px;
+}
+
+.support-buttons{
+  display:grid;
+  gap:10px;
+  margin-top:22px;
+}
+
+/* ================= BOTTOM NAV ================= */
+
+.bottom-nav{
+  position:fixed;
+  z-index:2000;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  background:rgba(7,11,23,.90);
+  backdrop-filter:blur(22px);
+  border-top:1px solid var(--border);
+  padding:5px 6px env(safe-area-inset-bottom);
+}
+
+.nav-item{
+  flex:1;
+  height:65px;
+  max-width:130px;
+  border:0;
+  background:none;
+  color:var(--muted);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  font-size:.65rem;
+  font-weight:700;
+}
+
+.nav-item .icon{
+  font-size:1.32rem;
+  transition:.2s;
+}
+
+.nav-item.active{
+  color:#38BDF8;
+}
+
+.nav-item.active .icon{
+  transform:translateY(-2px) scale(1.08);
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:.72rem;
+  padding:20px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:850px){
+  .filter-grid{
+    grid-template-columns:repeat(2,1fr);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .filter-grid .field:first-child{
+    grid-column:1/-1;
+  }
+}
 
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--bg-dark);
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.25) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.2) 0px, transparent 50%);
-    background-attachment: fixed;
-    color: var(--text-light);
-    min-height: 100vh;
-    padding-bottom: 80px;
-    overflow-x: hidden;
+@media(max-width:600px){
+  .top-nav{
+    height:66px;
+    padding:0 13px;
   }
 
-  .page {
-    display: none;
-    min-height: calc(100vh - 140px);
-    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .page.active { display: block; }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  .logo img{
+    width:35px;
+    height:35px;
   }
 
-  /* Header Bar */
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 24px;
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(16px);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 1px solid var(--card-border);
+  .logo-main{
+    font-size:1rem;
   }
 
-  .logo {
-    font-size: 1.3rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #38BDF8, #818CF8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  .logo-sub{
+    display:none;
   }
 
-  .logo img {
-    width: 36px;
-    height: 36px;
-    border-radius: 12px;
-    object-fit: cover;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  .top-nav .btn{
+    min-height:38px;
+    padding:8px 12px;
+    font-size:.72rem;
   }
 
-  .logo span {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    -webkit-text-fill-color: var(--text-muted);
+  .hero{
+    min-height:calc(100vh - 66px);
+    padding:45px 18px 30px;
   }
 
-  /* Bottom Navigation */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    background: rgba(15, 23, 42, 0.9);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid var(--card-border);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 1000;
+  .hero h1{
+    letter-spacing:-1.7px;
   }
 
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    flex: 1;
-    height: 100%;
-    transition: all 0.2s ease;
+  .hero-description{
+    font-size:.9rem;
   }
 
-  .nav-item span.icon {
-    font-size: 1.4rem;
-    margin-bottom: 3px;
-    transition: transform 0.2s ease;
+  .hero-stats{
+    margin-top:35px;
+    gap:7px;
   }
 
-  .nav-item.active { color: #38BDF8; }
-  .nav-item.active span.icon { transform: translateY(-2px) scale(1.1); }
-
-  /* Buttons */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  .stat-card{
+    padding:13px 5px;
   }
 
-  .btn:active { transform: scale(0.96); }
-
-  .btn-gradient {
-    background: var(--primary-gradient);
-    color: #FFF;
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  .stat-number{
+    font-size:1.05rem;
   }
 
-  .btn-accent {
-    background: var(--accent-gradient);
-    color: #FFF;
-    box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+  .stat-label{
+    font-size:.61rem;
   }
 
-  .btn-green {
-    background: var(--green-gradient);
-    color: #FFF;
-    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  .page-header{
+    padding:28px 15px 15px;
   }
 
-  .btn-ghost {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--text-light);
-    border: 1px solid var(--card-border);
+  .content-width,
+  .dashboard{
+    padding-left:13px;
+    padding-right:13px;
   }
 
-  .btn-lg { padding: 16px 36px; font-size: 1.05rem; }
-  .btn-sm { padding: 8px 16px; font-size: 0.85rem; border-radius: 12px; }
-
-  /* Hero Section */
-  .hero {
-    min-height: 70vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 24px;
+  .filter-box{
+    margin:8px 13px 20px;
+    padding:13px;
   }
 
-  .hero-badge {
-    background: rgba(99, 102, 241, 0.15);
-    border: 1px solid rgba(99, 102, 241, 0.4);
-    color: #818CF8;
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 24px;
+  .search-row{
+    grid-template-columns:1fr;
   }
 
-  .hero h1 {
-    font-size: clamp(2.5rem, 7vw, 4rem);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, #FFFFFF 0%, #38BDF8 50%, #A855F7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .filter-grid{
+    grid-template-columns:1fr 1fr;
   }
 
-  .hero p {
-    font-size: 1.1rem;
-    color: var(--text-muted);
-    max-width: 580px;
-    line-height: 1.6;
-    margin-bottom: 32px;
+  .house-grid{
+    grid-template-columns:1fr;
+    gap:13px;
   }
 
-  /* Cards Grid */
-  .house-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 24px;
+  .house-img{
+    height:220px;
   }
 
-  .house-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border-radius: var(--radius);
-    border: 1px solid var(--card-border);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
+  .detail-main{
+    height:235px;
   }
 
-  .house-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  .modal{
+    padding:7px;
   }
 
-  .house-img-box {
-    height: 210px;
-    background: #1E293B;
-    position: relative;
-    overflow: hidden;
+  .modal-content{
+    max-height:94vh;
+    border-radius:20px;
+    padding:14px;
   }
 
-  .house-img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .detail-actions{
+    grid-template-columns:1fr;
   }
 
-  .fav-btn {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid var(--card-border);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.2rem;
-    backdrop-filter: blur(8px);
-    transition: all 0.2s ease;
-    z-index: 10;
+  .form-card{
+    padding:16px;
+  }
+}
+
+@media(max-width:380px){
+  .filter-grid{
+    grid-template-columns:1fr;
   }
 
-  .fav-btn.active { background: #FFF; }
-
-  .house-info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
-  .house-info h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; color: #FFF; }
-  .house-info .price { color: #38BDF8; font-weight: 800; font-size: 1.3rem; margin-bottom: 6px; }
-  .house-info .loc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px; }
-
-  /* Form Elements */
-  .form-wrap { max-width: 600px; margin: 0 auto; }
-  .form-group { margin-bottom: 20px; }
-  label { display: block; font-size: 0.85rem; font-weight: 700; color: #38BDF8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-  input, select, textarea {
-    width: 100%;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1.5px solid var(--card-border);
-    border-radius: 14px;
-    padding: 14px 16px;
-    color: var(--text-light);
-    outline: none;
-    font-size: 1rem;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    transition: border-color 0.2s ease;
+  .hero-actions .btn{
+    width:100%;
   }
-  input:focus, select:focus, textarea:focus { border-color: #6366F1; }
-
-  /* Modal */
-  .modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(12px);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .modal.active { display: flex; }
-  .modal-content {
-    background: #1E293B;
-    border: 1px solid var(--card-border);
-    border-radius: 24px;
-    padding: 28px;
-    width: 100%;
-    max-width: 550px;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-  }
-  .close-modal { position: absolute; top: 16px; right: 20px; font-size: 1.8rem; cursor: pointer; color: var(--text-muted); }
-
-  /* Map Container */
-  .map-box {
-    width: 100%;
-    height: 200px;
-    border-radius: 16px;
-    border: 1px solid var(--card-border);
-    margin-top: 10px;
-    z-index: 1;
-  }
-
-  .gallery-preview {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    margin-bottom: 16px;
-  }
-  .gallery-preview img {
-    width: 80px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 10px;
-    cursor: pointer;
-    border: 2px solid transparent;
-  }
-  .gallery-preview img.active-thumb {
-    border-color: #38BDF8;
-  }
-
-  .page-header { padding: 32px 20px 16px; text-align: center; }
-  .page-header h2 { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #FFF, #38BDF8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .contact-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 36px; max-width: 520px; margin: 20px auto; text-align: center; }
-  footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 60px; }
+}
 </style>
 </head>
+
 <body>
 
-<nav>
+<!-- ================= TOP NAV ================= -->
+
+<nav class="top-nav">
+
   <div class="logo" onclick="switchTab(1)">
-    <img src="1785333686872.png" alt="SR Nest Logo"/>
-    SR Nest <span>Rental Hub</span>
+    <img src="1785333686872.png" alt="SR Nest"/>
+    <div>
+      <div class="logo-main">SR Nest</div>
+      <span class="logo-sub">Smart Rental Hub</span>
+    </div>
   </div>
-  <button class="btn btn-ghost btn-sm" onclick="switchTab(7)">Support</button>
+
+  <button class="btn btn-ghost btn-sm" onclick="switchTab(7)">
+    💬 Support
+  </button>
+
 </nav>
 
-<div class="page active" id="page-1">
+<!-- ================= HOME ================= -->
+
+<section class="page active" id="page-1">
+
   <div class="hero">
-    <div class="hero-badge">✨ Modern Rental Experience</div>
-    <h1>Find Your Perfect<br/>Space With SR Nest</h1>
-    <p style="font-size: 1.1rem; font-weight: 700; color: #38BDF8; margin-bottom: 12px;">Created by Sreejith Reddy</p>
-    <p>Discover verified homes or list your rental property for free.</p>
-    <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
-      <button class="btn btn-gradient btn-lg" onclick="switchTab(5)">🔍 Browse Homes</button>
-      <button class="btn btn-ghost btn-lg" onclick="checkAuthAndGoList()">🏡 Post Property</button>
-    </div>
-  </div>
-  <footer>© 2026 SR Nest · Developed by Sreejith Reddy</footer>
-</div>
 
-<div class="page" id="page-5">
-  <div class="page-header">
-    <h2>Available Homes</h2>
-    <p style="color: var(--text-muted);">Tap any house to view location maps and full property details!</p>
-  </div>
-  <div style="padding: 0 20px 30px;">
-    <div class="house-grid" id="homes-container">
-      <p style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">Fetching active listings...</p>
-    </div>
-  </div>
-</div>
-
-<div class="page" id="page-6">
-  <div class="page-header">
-    <h2>Saved Properties ❤️</h2>
-    <p style="color: var(--text-muted);">Your bookmarked rental homes.</p>
-  </div>
-  <div style="padding: 0 20px 30px;">
-    <div class="house-grid" id="saved-homes-container">
-      <p style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">No saved houses yet. Tap ❤️ on any home to save it!</p>
-    </div>
-  </div>
-</div>
-
-<div class="page" id="page-4">
-  <div class="page-header">
-    <h2>Owner Dashboard</h2>
-    <p style="color: var(--text-muted);">Manage your property listings and map location pin.</p>
-  </div>
-  <div style="padding: 0 20px 30px; max-width: 800px; margin: 0 auto;">
-    
-    <div style="margin-bottom: 32px;">
-      <h3 style="color: #38BDF8; margin-bottom: 16px; font-size: 1.3rem;">🔔 Booking Requests</h3>
-      <div id="booking-requests-container">
-        <p style="color: var(--text-muted);">Loading tenant requests...</p>
-      </div>
+    <div class="hero-badge">
+      ✨ Modern Rental Experience
     </div>
 
-    <hr style="border-color: var(--card-border); margin-bottom: 32px;"/>
+    <h1>
+      Find Your Perfect<br/>
+      Home With SR Nest
+    </h1>
 
-    <div style="margin-bottom: 32px;">
-      <h3 style="color: #38BDF8; margin-bottom: 16px; font-size: 1.3rem;">🏠 My Listings</h3>
-      <div class="house-grid" id="my-houses-container">
-        <p style="color: var(--text-muted);">Loading your house listings...</p>
-      </div>
+    <div class="creator">
+      Created by Sreejith Reddy
     </div>
 
-    <hr style="border-color: var(--card-border); margin-bottom: 32px;"/>
+    <p class="hero-description">
+      Discover rental homes, compare prices, save your favourites,
+      explore property locations and book a visit directly with owners.
+    </p>
 
-    <h3 style="color: #38BDF8; margin-bottom: 16px; font-size: 1.3rem;">➕ Post a Property</h3>
-    <div class="form-wrap">
-      <form id="property-form">
-        <div class="form-group">
-          <label>Owner Name</label>
-          <input type="text" id="prop-owner" required placeholder="e.g. Sreejith Reddy"/>
-        </div>
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" id="prop-phone" required placeholder="e.g. 9063576302"/>
-        </div>
-        <div class="form-group">
-          <label>Location / Address</label>
-          <input type="text" id="prop-location" required placeholder="e.g. Jubilee Hills, Hyderabad"/>
-        </div>
-        <div class="form-group">
-          <label>Monthly Rent (₹)</label>
-          <input type="number" id="prop-rent" required placeholder="e.g. 15000"/>
-        </div>
-        <div class="form-group">
-          <label>BHK Type</label>
-          <select id="prop-bhk">
-            <option value="1 BHK">1 BHK</option>
-            <option value="2 BHK">2 BHK</option>
-            <option value="3 BHK">3 BHK</option>
-            <option value="4 BHK">4 BHK</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Full Description & Amenities</label>
-          <textarea id="prop-desc" rows="3" placeholder="e.g. 24/7 Water supply, Car parking, Balcony view, Semi-furnished."></textarea>
-        </div>
-        <div class="form-group">
-          <label>📸 Upload Property Images (Up to 3)</label>
-          <input type="file" id="prop-images" accept="image/*" multiple required />
-        </div>
-        <div class="form-group">
-          <label>📍 Pin Location on Map (Tap map to set pin)</label>
-          <button type="button" class="btn btn-ghost btn-sm" style="margin-bottom: 8px;" onclick="getCurrentGPSLocation()">🎯 Use My Current Location</button>
-          <div id="picker-map" class="map-box"></div>
-          <input type="hidden" id="prop-lat"/>
-          <input type="hidden" id="prop-lng"/>
-        </div>
-        <button type="submit" id="submit-btn" class="btn btn-gradient btn-lg" style="width: 100%; margin-top: 10px;">💾 Publish Listing</button>
-      </form>
-    </div>
+    <div class="hero-actions">
 
-  </div>
-</div>
-
-<div class="page" id="page-7">
-  <div class="page-header">
-    <h2>Contact Support</h2>
-    <p style="color: var(--text-muted);">Reach founder Sreejith Reddy directly.</p>
-  </div>
-  <div style="padding: 0 20px 30px;">
-    <div class="contact-box">
-      <div style="font-size: 3.5rem; margin-bottom: 16px;">💬</div>
-      <h3 style="color: #FFF; margin-bottom: 20px; font-size: 1.4rem;">Get in Touch</h3>
-      <div style="display: flex; flex-direction: column; gap: 14px;">
-        <a href="tel:9063576302" class="btn btn-gradient btn-lg">📞 Call 9063576302</a>
-        <a href="https://wa.me/919063576302" class="btn btn-green btn-lg" target="_blank">💬 WhatsApp 9063576302</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="page" id="page-8">
-  <div class="page-header">
-    <h2 id="auth-title">User Account</h2>
-  </div>
-  <div style="padding: 0 20px 30px;">
-    <div id="auth-logged-out" class="contact-box">
-      <button class="btn btn-ghost btn-lg" style="width: 100%; background: #FFF; color: #0F172A;" onclick="loginWithGoogle()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"/> Sign in with Google
+      <button class="btn btn-primary btn-lg"
+              onclick="switchTab(5)">
+        🔍 Browse Homes
       </button>
+
+      <button class="btn btn-ghost btn-lg"
+              onclick="checkAuthAndGoList()">
+        🏡 Post Property
+      </button>
+
     </div>
 
-    <div id="auth-logged-in" class="contact-box" style="display: none;">
-      <div style="font-size: 3.5rem; margin-bottom: 12px;">👤</div>
-      <h3 id="user-display-name" style="color: #FFF; font-size: 1.4rem;">Welcome User</h3>
-      <p id="user-display-info" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;"></p>
-      <button class="btn btn-gradient btn-lg" style="width: 100%; margin-bottom: 14px;" onclick="switchTab(4)">🏡 Owner Dashboard</button>
-      <button class="btn btn-accent btn-lg" style="width: 100%;" onclick="logoutUser()">🚪 Sign Out</button>
-    </div>
-  </div>
-</div>
+    <div class="hero-stats">
 
-<!-- Detailed House View Modal -->
-<div class="modal" id="details-modal">
-  <div class="modal-content">
-    <span class="close-modal" onclick="closeDetailsModal()">&times;</span>
-    <div class="house-img-box" style="height:240px; border-radius:16px; margin-bottom:12px;">
-      <img id="detail-main-img" src="" alt="House Image"/>
-    </div>
-    <div class="gallery-preview" id="detail-gallery"></div>
-    
-    <h3 id="detail-title" style="color:#FFF; font-size:1.4rem; margin-bottom:4px;">1 BHK</h3>
-    <div id="detail-price" style="color:#38BDF8; font-weight:800; font-size:1.3rem; margin-bottom:8px;">₹0/month</div>
-    <p id="detail-loc" style="color:var(--text-muted); font-size:0.95rem; margin-bottom:12px;">📍 Location</p>
-    <p id="detail-desc" style="color:#CBD5E1; font-size:0.9rem; line-height:1.5; margin-bottom:16px;">Description...</p>
-
-    <h4 style="color:#38BDF8; font-size:1rem; margin-bottom:8px;">📍 Property Map Location</h4>
-    <div id="detail-map" class="map-box" style="margin-bottom:20px;"></div>
-
-    <button id="detail-book-btn" class="btn btn-gradient" style="width:100%; margin-bottom:10px;">📝 Book Visit</button>
-    <div style="display:flex; gap:10px;">
-      <a id="detail-call-btn" href="#" class="btn btn-ghost" style="flex:1;">📞 Call</a>
-      <a id="detail-wa-btn" href="#" target="_blank" class="btn btn-green" style="flex:1;">💬 WhatsApp</a>
-    </div>
-  </div>
-</div>
-
-<!-- Booking Form Modal -->
-<div class="modal" id="booking-modal">
-  <div class="modal-content">
-    <span class="close-modal" onclick="closeBookingModal()">&times;</span>
-    <h3 style="color: #FFF; margin-bottom: 16px; font-size: 1.3rem;">📝 Book House Visit</h3>
-    <form id="booking-form">
-      <input type="hidden" id="book-house-id"/>
-      <input type="hidden" id="book-owner-phone"/>
-      <input type="hidden" id="book-owner-uid"/>
-      <div class="form-group">
-        <label>Your Full Name</label>
-        <input type="text" id="tenant-name" required placeholder="e.g. Ramesh Kumar"/>
+      <div class="stat-card">
+        <div class="stat-number" id="hero-property-count">0+</div>
+        <div class="stat-label">Properties</div>
       </div>
-      <div class="form-group">
-        <label>Phone Number</label>
-        <input type="tel" id="tenant-phone" required placeholder="e.g. 9876543210"/>
+
+      <div class="stat-card">
+        <div class="stat-number">📍</div>
+        <div class="stat-label">Map Locations</div>
       </div>
-      <div class="form-group">
-        <label>Preferred Visit Date</label>
-        <input type="date" id="tenant-date" required/>
+
+      <div class="stat-card">
+        <div class="stat-number">❤️</div>
+        <div class="stat-label">Save Favourites</div>
       </div>
-      <button type="submit" class="btn btn-gradient btn-lg" style="width: 100%;">🚀 Send Request</button>
-    </form>
-  </div>
-</div>
 
-<div class="bottom-nav">
-  <div class="nav-item active" id="tab-1" onclick="switchTab(1)">
-    <span class="icon">🏠</span>
-    <span>Home</span>
-  </div>
-  <div class="nav-item" id="tab-5" onclick="switchTab(5)">
-    <span class="icon">🔍</span>
-    <span>Browse</span>
-  </div>
-  <div class="nav-item" id="tab-6" onclick="switchTab(6)">
-    <span class="icon">❤️</span>
-    <span>Saved</span>
-  </div>
-  <div class="nav-item" id="tab-4" onclick="checkAuthAndGoList()">
-    <span class="icon">🏡</span>
-    <span>Property</span>
-  </div>
-  <div class="nav-item" id="tab-8" onclick="switchTab(8)">
-    <span class="icon">👤</span>
-    <span>Profile</span>
-  </div>
-</div>
+    </div>
 
-<!-- Leaflet JavaScript Library -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAtTHJpBv9WcG3M_b_r1VavxgPgqPHnljE",
-    authDomain: "sr-nest.firebaseapp.com",
-    projectId: "sr-nest",
-    storageBucket: "sr-nest.firebasestorage.app",
-    messagingSenderId: "676182127627",
-    appId: "1:676182127627:web:40f6189e0a6ab0f8dec30e"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-  const messaging = getMessaging(app);
-
-  let pickerMap, detailMap, pickerMarker, detailMarker;
-
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('firebase-messaging-sw.js').catch(err => console.error(err));
-  }
-
-  let currentUser = null;
-  let allListings = [];
-  let savedHouseIds = JSON.parse(localStorage.getItem('srnest_saved') || '[]');
-
-  // Initialize History State on Page Load
-  history.replaceState({ pageNum: 1 }, '', '');
-
-  function renderTabUI(pageNum) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    
-    const targetPage = document.getElementById(`page-${pageNum}`);
-    const targetTab = document.getElementById(`tab-${pageNum}`);
-    
-    if(targetPage) targetPage.classList.add('active');
-    if(targetTab) targetTab.classList.add('active');
-    
-    window.scrollTo(0,0);
-    if(pageNum === 5) loadProperties();
-    if(pageNum === 6) renderSavedProperties();
-    if(pageNum === 4) {
-      setTimeout(() => {
-        initPickerMap();
-        pickerMap.invalidateSize();
-      }, 200);
-      if(currentUser) {
-        loadOwnerRequests();
-        loadMyListedHouses();
-      }
-    }
-  }
-
-  window.switchTab = function(pageNum, isBackAction = false) {
-    if(!isBackAction) {
-      history.pushState({ pageNum: pageNum }, '', '');
-    }
-    renderTabUI(pageNum);
-  };
-
-  // Listen for Browser / Device Back Button Press
-  window.onpopstate = function(event) {
-    if (event.state && event.state.pageNum) {
-      renderTabUI(event.state.pageNum);
-    } else {
-      renderTabUI(1);
-    }
-  };
-
-  function initPickerMap() {
-    if(pickerMap) return;
-    const defaultLat = 17.3850, defaultLng = 78.4867;
-    pickerMap = L.map('picker-map').setView([defaultLat, defaultLng], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(pickerMap);
-
-    pickerMarker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(pickerMap);
-    
-    document.getElementById('prop-lat').value = defaultLat;
-    document.getElementById('prop-lng').value = defaultLng;
-
-    pickerMap.on('click', (e) => {
-      pickerMarker.setLatLng(e.latlng);
-      document.getElementById('prop-lat').value = e.latlng.lat;
-      document.getElementById('prop-lng').value = e.latlng.lng;
-    });
-
-    pickerMarker.on('dragend', () => {
-      const position = pickerMarker.getLatLng();
-      document.getElementById('prop-lat').value = position.lat;
-      document.getElementById('prop-lng').value = position.lng;
-    });
-  }
-
-  window.getCurrentGPSLocation = function() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        pickerMap.setView([lat, lng], 15);
-        pickerMarker.setLatLng([lat, lng]);
-        document.getElementById('prop-lat').value = lat;
-        document.getElementById('prop-lng').value = lng;
-      });
-    }
-  };
-
-  window.checkAuthAndGoList = function() {
-    if(currentUser) {
-      switchTab(4);
-    } else {
-      alert('Please log in first!');
-      switchTab(8);
-    }
-  };
-
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-    if (user) {
-      document.getElementById('auth-logged-out').style.display = 'none';
-      document.getElementById('auth-logged-in').style.display = 'block';
-      document.getElementById('user-display-name').innerText = user.displayName || "SR Nest User";
-      document.getElementById('user-display-info').innerText = user.email || "";
-
-      if(document.getElementById('page-4').classList.contains('active')) {
-        loadOwnerRequests();
-        loadMyListedHouses();
-      }
-    } else {
-      document.getElementById('auth-logged-out').style.display = 'block';
-      document.getElementById('auth-logged-in').style.display = 'none';
-    }
-  });
-
-  window.loginWithGoogle = async function() {
-    try {
-      await signInWithPopup(auth, new GoogleAuthProvider());
-      alert('✅ Logged in successfully!');
-      switchTab(1);
-    } catch (err) {
-      alert('Login failed: ' + err.message);
-    }
-  };
-
-  window.logoutUser = async function() {
-    await signOut(auth);
-    switchTab(1);
-  };
-
-  window.openDetailsModal = function(id) {
-    const data = allListings.find(item => item.id === id);
-    if(!data) return;
-
-    const images = data.imageUrls || [data.imageUrl || 'https://via.placeholder.com/300x200'];
-    const mainImg = document.getElementById('detail-main-img');
-    mainImg.src = images[0];
-
-    const galleryBox = document.getElementById('detail-gallery');
-    galleryBox.innerHTML = '';
-    images.forEach((imgUrl, idx) => {
-      const thumb = document.createElement('img');
-      thumb.src = imgUrl;
-      if(idx === 0) thumb.classList.add('active-thumb');
-      thumb.onclick = () => {
-        mainImg.src = imgUrl;
-        document.querySelectorAll('.gallery-preview img').forEach(t => t.classList.remove('active-thumb'));
-        thumb.classList.add('active-thumb');
-      };
-      galleryBox.appendChild(thumb);
-    });
-
-    document.getElementById('detail-title').innerText = data.bhk || 'Rental Home';
-    document.getElementById('detail-price').innerText = `₹${data.rent}/month`;
-    document.getElementById('detail-loc').innerText = `📍 ${data.location}`;
-    document.getElementById('detail-desc').innerText = data.description || 'No description provided by owner.';
-
-    document.getElementById('detail-call-btn').href = `tel:${data.phone}`;
-    document.getElementById('detail-wa-btn').href = `https://wa.me/91${data.phone}?text=${encodeURIComponent(`Hi! I am interested in your ${data.bhk} in ${data.location} listed on SR Nest.`)}`;
-    
-    document.getElementById('detail-book-btn').onclick = () => {
-      closeDetailsModal();
-      openBookingModal(data.id, data.phone, data.ownerUid);
-    };
-
-    document.getElementById('details-modal').classList.add('active');
-
-    setTimeout(() => {
-      const lat = data.lat || 17.3850;
-      const lng = data.lng || 78.4867;
-      if(!detailMap) {
-        detailMap = L.map('detail-map').setView([lat, lng], 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(detailMap);
-        detailMarker = L.marker([lat, lng]).addTo(detailMap);
-      } else {
-        detailMap.setView([lat, lng], 15);
-        detailMarker.setLatLng([lat, lng]);
-      }
-      detailMap.invalidateSize();
-    }, 200);
-  };
-
-  window.closeDetailsModal = function() {
-    document.getElementById('details-modal').classList.remove('active');
-  };
-
-  window.openBookingModal = function(houseId, ownerPhone, ownerUid) {
-    if(!currentUser) {
-      alert('Please log in to book a house visit!');
-      return switchTab(8);
-    }
-    document.getElementById('book-house-id').value = houseId;
-    document.getElementById('book-owner-phone').value = ownerPhone || '';
-    document.getElementById('book-owner-uid').value = ownerUid || '';
-    document.getElementById('booking-modal').classList.add('active');
-  };
-
-  window.closeBookingModal = function() {
-    document.getElementById('booking-modal').classList.remove('active');
-  };
-
-  document.getElementById('booking-form')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    try {
-      await addDoc(collection(db, "bookings"), {
-        houseId: document.getElementById('book-house-id').value,
-        ownerPhone: document.getElementById('book-owner-phone').value,
-        ownerUid: document.getElementById('book-owner-uid').value,
-        tenantUid: currentUser.uid,
-        tenantName: document.getElementById('tenant-name').value.trim(),
-        tenantPhone: document.getElementById('tenant-phone').value.trim(),
-        visitDate: document.getElementById('tenant-date').value,
-        status: "Pending",
-        createdAt: new Date().toISOString()
-      });
-      alert('🎉 Booking request sent to house owner!');
-      closeBookingModal();
-      document.getElementById('booking-form').reset();
-    } catch(err) {
-      alert('Error submitting booking: ' + err.message);
-    }
-  });
-
-  async function loadOwnerRequests() {
-    const container = document.getElementById('booking-requests-container');
-    if(!currentUser) return;
-
-    try {
-      const q = query(collection(db, "bookings"), where("ownerUid", "==", currentUser.uid));
-      const querySnapshot = await getDocs(q);
-      let requests = [];
-
-      querySnapshot.forEach(docSnap => requests.push({ id: docSnap.id, ...docSnap.data() }));
-
-      if(requests.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted);">No booking requests received for your properties yet.</p>';
-        return;
-      }
-
-      container.innerHTML = '';
-      requests.forEach(req => {
-        const div = document.createElement('div');
-        div.style.cssText = "background: rgba(15, 23, 42, 0.6); border: 1px solid var(--card-border); border-radius: 16px; padding: 18px; margin-bottom: 14px;";
-        div.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <strong style="color:#FFF;">👤 ${req.tenantName}</strong>
-            <span style="background: rgba(99, 102, 241, 0.2); color: #818CF8; padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 700;">${req.status}</span>
-          </div>
-          <p style="font-size:.9rem; color:var(--text-muted); margin-bottom:4px;">📞 Phone: <a href="tel:${req.tenantPhone}" style="color:#38BDF8;">${req.tenantPhone}</a></p>
-          <p style="font-size:.9rem; color:var(--text-muted); margin-bottom:14px;">📅 Requested Date: ${req.visitDate}</p>
-          ${req.status === 'Pending' ? `
-            <div style="display:flex; gap:10px;">
-              <button class="btn btn-green btn-sm" onclick="updateBookingStatus('${req.id}', 'Accepted', '${req.tenantPhone}')">✅ Accept</button>
-              <button class="btn btn-accent btn-sm" onclick="updateBookingStatus('${req.id}', 'Rejected', '${req.tenantPhone}')">❌ Reject</button>
-            </div>
-          ` : ''}
-        `;
-        container.appendChild(div);
-      });
-    } catch(err) {
-      container.innerHTML = '<p style="color:var(--text-muted);">No booking requests found.</p>';
-    }
-  }
-
-  async function loadMyListedHouses() {
-    const container = document.getElementById('my-houses-container');
-    if(!currentUser) return;
-
-    try {
-      const q = query(collection(db, "listings"), where("ownerUid", "==", currentUser.uid));
-      const querySnapshot = await getDocs(q);
-      let myHouses = [];
-
-      querySnapshot.forEach(docSnap => myHouses.push({ id: docSnap.id, ...docSnap.data() }));
-
-      if(myHouses.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted); grid-column:1/-1;">You have not listed any houses yet.</p>';
-        return;
-      }
-
-      container.innerHTML = '';
-      myHouses.forEach((data) => {
-        const card = document.createElement('div');
-        card.className = 'house-card';
-        card.onclick = () => openDetailsModal(data.id);
-        const displayImg = (data.imageUrls && data.imageUrls[0]) || data.imageUrl || 'https://via.placeholder.com/300x200';
-        card.innerHTML = `
-          <div class="house-img-box">
-            <img src="${displayImg}" alt="House"/>
-          </div>
-          <div class="house-info">
-            <h4>${data.bhk || 'Rental Home'}</h4>
-            <div class="price">₹${data.rent}/month</div>
-            <div class="loc">📍 ${data.location}</div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    } catch(err) {
-      container.innerHTML = '<p style="color:var(--text-muted); grid-column:1/-1;">No houses listed under your account yet.</p>';
-    }
-  }
-
-  window.updateBookingStatus = async function(bookingId, status, tenantPhone) {
-    try {
-      const bookingRef = doc(db, "bookings", bookingId);
-      await updateDoc(bookingRef, { status: status });
-      alert(`Booking request ${status}!`);
-
-      if(status === 'Accepted') {
-        const msg = encodeURIComponent(`Hi! Your booking request for the house visit on SR Nest has been ACCEPTED by the owner.`);
-        window.open(`https://wa.me/91${tenantPhone}?text=${msg}`, '_blank');
-      }
-      
-      loadOwnerRequests();
-    } catch(err) {
-      alert('Failed to update status: ' + err.message);
-    }
-  };
-
-  window.toggleSaveHouse = function(id, event) {
-    if(event) event.stopPropagation();
-    if(savedHouseIds.includes(id)) {
-      savedHouseIds = savedHouseIds.filter(favId => favId !== id);
-    } else {
-      savedHouseIds.push(id);
-    }
-    localStorage.setItem('srnest_saved', JSON.stringify(savedHouseIds));
-    loadProperties();
-    renderSavedProperties();
-  };
-
-  async function loadProperties() {
-    const container = document.getElementById('homes-container');
-    try {
-      const q = query(collection(db, "listings"));
-      const querySnapshot = await getDocs(q);
-      allListings = [];
-
-      querySnapshot.forEach((docSnap) => allListings.push({ id: docSnap.id, ...docSnap.data() }));
-
-      if(allListings.length === 0) {
-        container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">No properties listed yet.</p>';
-        return;
-      }
-
-      container.innerHTML = '';
-      allListings.forEach((data) => {
-        const isSaved = savedHouseIds.includes(data.id);
-        const card = document.createElement('div');
-        card.className = 'house-card';
-        card.onclick = () => openDetailsModal(data.id);
-        const displayImg = (data.imageUrls && data.imageUrls[0]) || data.imageUrl || 'https://via.placeholder.com/300x200';
-
-        card.innerHTML = `
-          <div class="house-img-box">
-            <img src="${displayImg}" alt="House"/>
-            <button class="fav-btn ${isSaved ? 'active' : ''}" onclick="toggleSaveHouse('${data.id}', event)">
-              ${isSaved ? '❤️' : '🤍'}
-            </button>
-          </div>
-          <div class="house-info">
-            <h4>${data.bhk || 'Rental Home'}</h4>
-            <div class="price">₹${data.rent}/month</div>
-            <div class="loc">📍 ${data.location}</div>
-            <button class="btn btn-gradient" style="width:100%; font-size:.9rem;">
-              👁️ View Details & Map
-            </button>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    } catch (err) {
-      container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:#FF6B6B;">Failed to load listings.</p>';
-    }
-  }
-
-  function renderSavedProperties() {
-    const container = document.getElementById('saved-homes-container');
-    const savedList = allListings.filter(item => savedHouseIds.includes(item.id));
-
-    if(savedList.length === 0) {
-      container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">No saved houses yet. Tap ❤️ on any home to save it!</p>';
-      return;
-    }
-
-    container.innerHTML = '';
-    savedList.forEach((data) => {
-      const card = document.createElement('div');
-      card.className = 'house-card';
-      card.onclick = () => openDetailsModal(data.id);
-      const displayImg = (data.imageUrls && data.imageUrls[0]) || data.imageUrl || 'https://via.placeholder.com/300x200';
-
-      card.innerHTML = `
-        <div class="house-img-box">
-          <img src="${displayImg}" alt="House"/>
-          <button class="fav-btn active" onclick="toggleSaveHouse('${data.id}', event)">❤️</button>
-        </div>
-        <div class="house-info">
-          <h4>${data.bhk || 'Rental Home'}</h4>
-          <div class="price">₹${data.rent}/month</div>
-          <div class="loc">📍 ${data.location}</div>
-          <button class="btn btn-gradient" style="width:100%; font-size:.9rem;">
-            👁️ View Details & Map
-          </button>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  document.getElementById('property-form')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const fileInput = document.getElementById('prop-images');
-    if(!fileInput.files.length) return alert('Please upload at least one photo!');
-
-    const submitBtn = document.getElementById('submit-btn');
-    submitBtn.innerText = 'Uploading...';
-    submitBtn.disabled = true;
-
-    const imageUrls = [];
-    const files = Array.from(fileInput.files).slice(0, 3);
-
-    for (let file of files) {
-      const base64 = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.readAsDataURL(file);
-      });
-      imageUrls.push(base64);
-    }
-
-    try {
-      await addDoc(collection(db, "listings"), {
-        ownerUid: currentUser.uid,
-        ownerName: document.getElementById('prop-owner').value.trim(),
-        phone: document.getElementById('prop-phone').value.trim(),
-        location: document.getElementById('prop-location').value.trim(),
-        rent: document.getElementById('prop-rent').value.trim(),
-        bhk: document.getElementById('prop-bhk').value,
-        description: document.getElementById('prop-desc').value.trim(),
-        lat: parseFloat(document.getElementById('prop-lat').value) || 17.3850,
-        lng: parseFloat(document.getElementById('prop-lng').value) || 78.4867,
-        imageUrls: imageUrls,
-        createdAt: new Date().toISOString()
-      });
-      alert('🎉 Property published with map pin successfully!');
-      document.getElementById('property-form').reset();
-      submitBtn.innerText = '💾 Publish Listing';
-      submitBtn.disabled = false;
-      switchTab(4);
-    } catch (err) {
-      alert('Error posting property: ' + err.message);
-      submitBtn.innerText = '💾 Publish Listing';
-      submitBtn.disabled = false;
-    }
-  });
-</script>
-
-</body>
-</html>
+  </d
