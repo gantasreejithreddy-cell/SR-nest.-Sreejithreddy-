@@ -1221,4 +1221,2940 @@ footer{
 
     </div>
 
-  </d
+  </div>
+
+  <footer>
+    © 2026 SR Nest · Developed by Sreejith Reddy
+  </footer>
+
+</section>
+
+<!-- ================= BROWSE ================= -->
+
+<section class="page" id="page-5">
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <h2>Available Homes</h2>
+      <p>Search, filter and find the right rental for you.</p>
+    </div>
+  </div>
+
+  <div class="filter-box">
+
+    <div class="search-row">
+
+      <div class="search-input-wrap">
+        <span>🔎</span>
+        <input
+          id="search-input"
+          class="search-input"
+          type="search"
+          placeholder="Search location, BHK, owner or amenities..."
+          autocomplete="off"
+        />
+      </div>
+
+      <button
+        class="btn btn-primary"
+        onclick="applyFilters()">
+        Search
+      </button>
+
+    </div>
+
+    <div class="filter-grid">
+
+      <div class="field">
+        <label>BHK</label>
+        <select id="filter-bhk">
+          <option value="">All BHK</option>
+          <option value="1 BHK">1 BHK</option>
+          <option value="2 BHK">2 BHK</option>
+          <option value="3 BHK">3 BHK</option>
+          <option value="4 BHK">4 BHK</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Minimum Rent</label>
+        <input
+          id="filter-min-rent"
+          type="number"
+          min="0"
+          placeholder="₹ Min"
+        />
+      </div>
+
+      <div class="field">
+        <label>Maximum Rent</label>
+        <input
+          id="filter-max-rent"
+          type="number"
+          min="0"
+          placeholder="₹ Max"
+        />
+      </div>
+
+      <div class="field">
+        <label>Sort</label>
+        <select id="filter-sort">
+          <option value="newest">Newest First</option>
+          <option value="low">Rent: Low to High</option>
+          <option value="high">Rent: High to Low</option>
+          <option value="bhk">BHK: Low to High</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Quick Search</label>
+        <select id="filter-location">
+          <option value="">Any Location</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="filter-bottom">
+
+      <div class="results-count" id="results-count">
+        Loading properties...
+      </div>
+
+      <div class="quick-filters">
+
+        <button class="chip" onclick="quickBhk('1 BHK')">
+          1 BHK
+        </button>
+
+        <button class="chip" onclick="quickBhk('2 BHK')">
+          2 BHK
+        </button>
+
+        <button class="chip" onclick="quickBhk('3 BHK')">
+          3 BHK
+        </button>
+
+        <button class="chip" onclick="clearFilters()">
+          ✕ Clear
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="content-width">
+
+    <div class="house-grid" id="homes-container">
+
+      <div class="house-card skeleton">
+        <div class="skeleton-img"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line"></div>
+        </div>
+      </div>
+
+      <div class="house-card skeleton">
+        <div class="skeleton-img"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line"></div>
+        </div>
+      </div>
+
+      <div class="house-card skeleton">
+        <div class="skeleton-img"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= SAVED ================= -->
+
+<section class="page" id="page-6">
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <h2>❤️ Saved Properties</h2>
+      <p>Your favourite rental homes are stored on this device.</p>
+    </div>
+  </div>
+
+  <div class="content-width">
+
+    <div class="house-grid" id="saved-homes-container">
+
+      <div class="empty-state">
+        <div class="empty-icon">❤️</div>
+        <h3>No saved homes yet</h3>
+        <p>Tap the heart button on any property to save it.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= OWNER DASHBOARD ================= -->
+
+<section class="page" id="page-4">
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <h2>🏡 Owner Dashboard</h2>
+      <p>Manage your rental properties and booking requests.</p>
+    </div>
+  </div>
+
+  <div class="dashboard">
+
+    <!-- REQUESTS -->
+
+    <div class="dashboard-section">
+
+      <div class="section-title">
+        <h3>🔔 Booking Requests</h3>
+        <span>Visitor requests</span>
+      </div>
+
+      <div id="booking-requests-container">
+
+        <div class="empty-state">
+          <div class="empty-icon">⏳</div>
+          <p>Loading requests...</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- MY LISTINGS -->
+
+    <div class="dashboard-section">
+
+      <div class="section-title">
+        <h3>🏠 My Listings</h3>
+        <span>Your properties</span>
+      </div>
+
+      <div class="house-grid" id="my-houses-container">
+
+        <div class="empty-state">
+          <div class="empty-icon">⏳</div>
+          <p>Loading your properties...</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- POST PROPERTY -->
+
+    <div class="dashboard-section">
+
+      <div class="section-title">
+        <h3>➕ Post a Property</h3>
+        <span>Free listing</span>
+      </div>
+
+      <div class="form-card">
+
+        <form id="property-form">
+
+          <div class="form-group">
+            <label>Owner Name</label>
+            <input
+              type="text"
+              id="prop-owner"
+              required
+              maxlength="80"
+              placeholder="e.g. Sreejith Reddy"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input
+              type="tel"
+              id="prop-phone"
+              required
+              inputmode="numeric"
+              maxlength="15"
+              placeholder="e.g. 9063576302"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Location / Address</label>
+            <input
+              type="text"
+              id="prop-location"
+              required
+              maxlength="150"
+              placeholder="e.g. Hyderabad, Telangana"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Monthly Rent ₹</label>
+            <input
+              type="number"
+              id="prop-rent"
+              required
+              min="0"
+              step="1"
+              placeholder="e.g. 15000"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>BHK Type</label>
+
+            <select id="prop-bhk">
+              <option value="1 BHK">1 BHK</option>
+              <option value="2 BHK">2 BHK</option>
+              <option value="3 BHK">3 BHK</option>
+              <option value="4 BHK">4 BHK</option>
+            </select>
+
+          </div>
+
+          <div class="form-group">
+            <label>Description & Amenities</label>
+
+            <textarea
+              id="prop-desc"
+              maxlength="1000"
+              placeholder="Example: 24/7 water supply, parking, balcony, semi-furnished..."
+            ></textarea>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>📸 Property Images</label>
+
+            <input
+              class="file-input"
+              type="file"
+              id="prop-images"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              required
+            />
+
+            <div class="file-note">
+              Select up to 3 images. Images will be compressed automatically before saving.
+            </div>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>📍 Property Map Location</label>
+
+            <button
+              type="button"
+              class="btn btn-ghost btn-sm"
+              onclick="getCurrentGPSLocation()">
+              🎯 Use My Current Location
+            </button>
+
+            <div
+              id="picker-map"
+              class="map-box">
+            </div>
+
+            <div class="map-help">
+              Tap the map or drag the marker to choose the exact property location.
+            </div>
+
+            <input type="hidden" id="prop-lat"/>
+            <input type="hidden" id="prop-lng"/>
+
+          </div>
+
+          <button
+            type="submit"
+            id="submit-btn"
+            class="btn btn-primary btn-lg"
+            style="width:100%;">
+            🚀 Publish Property
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= SUPPORT ================= -->
+
+<section class="page" id="page-7">
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <h2>💬 Contact Support</h2>
+      <p>Need help with SR Nest?</p>
+    </div>
+  </div>
+
+  <div class="content-width">
+
+    <div class="support-card">
+
+      <div class="support-icon">
+        💬
+      </div>
+
+      <h3>SR Nest Support</h3>
+
+      <p style="color:var(--muted);margin-top:8px;line-height:1.6;">
+        Contact founder Sreejith Reddy directly for support,
+        property questions or website feedback.
+      </p>
+
+      <div class="support-buttons">
+
+        <a
+          href="tel:9063576302"
+          class="btn btn-primary btn-lg">
+          📞 Call 9063576302
+        </a>
+
+        <a
+          href="https://wa.me/919063576302"
+          target="_blank"
+          rel="noopener"
+          class="btn btn-green btn-lg">
+          💬 WhatsApp
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= PROFILE ================= -->
+
+<section class="page" id="page-8">
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <h2>👤 Your Account</h2>
+      <p>Sign in to post properties and book visits.</p>
+    </div>
+  </div>
+
+  <div class="content-width">
+
+    <div
+      id="auth-logged-out"
+      class="profile-card">
+
+      <div class="profile-avatar">
+        👤
+      </div>
+
+      <h3>Welcome to SR Nest</h3>
+
+      <p style="color:var(--muted);margin:8px 0 22px;">
+        Sign in with Google to use owner and booking features.
+      </p>
+
+      <button
+        class="btn btn-ghost btn-lg"
+        style="width:100%;background:#fff;color:#0F172A;"
+        onclick="loginWithGoogle()">
+
+        <img
+          src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+          width="20"
+          alt="Google"/>
+
+        Sign in with Google
+
+      </button>
+
+    </div>
+
+    <div
+      id="auth-logged-in"
+      class="profile-card"
+      style="display:none;">
+
+      <div class="profile-avatar">
+        👤
+      </div>
+
+      <h3 id="user-display-name">
+        SR Nest User
+      </h3>
+
+      <p
+        id="user-display-info"
+        style="color:var(--muted);margin:7px 0 25px;">
+      </p>
+
+      <button
+        class="btn btn-primary btn-lg"
+        style="width:100%;margin-bottom:10px;"
+        onclick="switchTab(4)">
+        🏡 Owner Dashboard
+      </button>
+
+      <button
+        class="btn btn-danger btn-lg"
+        style="width:100%;"
+        onclick="logoutUser()">
+        🚪 Sign Out
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= PROPERTY DETAILS MODAL ================= -->
+
+<div
+  class="modal"
+  id="details-modal">
+
+  <div class="modal-content">
+
+    <button
+      class="modal-close"
+      onclick="closeDetailsModal()"
+      aria-label="Close">
+      ×
+    </button>
+
+    <img
+      id="detail-main-img"
+      class="detail-main"
+      src=""
+      alt="Property"/>
+
+    <div
+      id="detail-gallery"
+      class="gallery">
+    </div>
+
+    <div class="detail-heading">
+
+      <div>
+        <h3 id="detail-title">
+          Rental Home
+        </h3>
+
+        <div
+          id="detail-loc"
+          class="detail-location">
+          📍 Location
+        </div>
+      </div>
+
+      <div
+        id="detail-price"
+        class="price">
+        ₹0
+      </div>
+
+    </div>
+
+    <p
+      id="detail-desc"
+      class="detail-description">
+      No description available.
+    </p>
+
+    <h4 style="margin-bottom:7px;color:#7DD3FC;">
+      📍 Property Location
+    </h4>
+
+    <div
+      id="detail-map"
+      class="map-box">
+    </div>
+
+    <div class="detail-actions">
+
+      <button
+        id="detail-book-btn"
+        class="btn btn-primary">
+        📝 Book Visit
+      </button>
+
+      <a
+        id="detail-call-btn"
+        href="#"
+        class="btn btn-ghost">
+        📞 Call Owner
+      </a>
+
+      <a
+        id="detail-wa-btn"
+        href="#"
+        target="_blank"
+        rel="noopener"
+        class="btn btn-green">
+        💬 WhatsApp
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ================= BOOKING MODAL ================= -->
+
+<div
+  class="modal"
+  id="booking-modal">
+
+  <div class="modal-content">
+
+    <button
+      class="modal-close"
+      onclick="closeBookingModal()">
+      ×
+    </button>
+
+    <h3 style="font-size:1.35rem;margin-bottom:6px;">
+      📝 Book House Visit
+    </h3>
+
+    <p style="color:var(--muted);font-size:.8rem;margin-bottom:20px;">
+      Send your preferred visit date to the property owner.
+    </p>
+
+    <form id="booking-form">
+
+      <input type="hidden" id="book-house-id"/>
+      <input type="hidden" id="book-owner-phone"/>
+      <input type="hidden" id="book-owner-uid"/>
+
+      <div class="form-group">
+        <label>Your Full Name</label>
+        <input
+          type="text"
+          id="tenant-name"
+          maxlength="80"
+          required
+          placeholder="Your name"/>
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input
+          type="tel"
+          id="tenant-phone"
+          maxlength="15"
+          required
+          placeholder="Your phone number"/>
+      </div>
+
+      <div class="form-group">
+        <label>Preferred Visit Date</label>
+        <input
+          type="date"
+          id="tenant-date"
+          required/>
+      </div>
+
+      <button
+        type="submit"
+        id="booking-submit-btn"
+        class="btn btn-primary btn-lg"
+        style="width:100%;">
+        🚀 Send Request
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- ================= BOTTOM NAV ================= -->
+
+<nav class="bottom-nav">
+
+  <button
+    class="nav-item active"
+    id="tab-1"
+    onclick="switchTab(1)">
+    <span class="icon">🏠</span>
+    <span>Home</span>
+  </button>
+
+  <button
+    class="nav-item"
+    id="tab-5"
+    onclick="switchTab(5)">
+    <span class="icon">🔍</span>
+    <span>Browse</span>
+  </button>
+
+  <button
+    class="nav-item"
+    id="tab-6"
+    onclick="switchTab(6)">
+    <span class="icon">❤️</span>
+    <span>Saved</span>
+  </button>
+
+  <button
+    class="nav-item"
+    id="tab-4"
+    onclick="checkAuthAndGoList()">
+    <span class="icon">🏡</span>
+    <span>Property</span>
+  </button>
+
+  <button
+    class="nav-item"
+    id="tab-8"
+    onclick="switchTab(8)">
+    <span class="icon">👤</span>
+    <span>Profile</span>
+  </button>
+
+</nav>
+
+<footer>
+  © 2026 SR Nest
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  query,
+  where
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+/* ================= FIREBASE ================= */
+
+const firebaseConfig = {
+  apiKey:"AIzaSyAtTHJpBv9WcG3M_b_r1VavxgPgqPHnljE",
+  authDomain:"sr-nest.firebaseapp.com",
+  projectId:"sr-nest",
+  storageBucket:"sr-nest.firebasestorage.app",
+  messagingSenderId:"676182127627",
+  appId:"1:676182127627:web:40f6189e0a6ab0f8dec30e"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+/* ================= GLOBAL STATE ================= */
+
+let currentUser = null;
+
+let allListings = [];
+
+let filteredListings = [];
+
+let pickerMap = null;
+let pickerMarker = null;
+
+let detailMap = null;
+let detailMarker = null;
+
+let savedHouseIds =
+  JSON.parse(
+    localStorage.getItem("srnest_saved") || "[]"
+  );
+
+/* ================= HELPERS ================= */
+
+const $ = id => document.getElementById(id);
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+function formatRent(value){
+
+  const number = Number(value);
+
+  if(!Number.isFinite(number)){
+    return "₹0";
+  }
+
+  return "₹" + number.toLocaleString("en-IN");
+
+}
+
+function cleanPhone(phone){
+
+  return String(phone || "")
+    .replace(/\D/g,"")
+    .slice(-10);
+
+}
+
+function imageFor(data){
+
+  if(
+    Array.isArray(data.imageUrls) &&
+    data.imageUrls.length
+  ){
+    return data.imageUrls[0];
+  }
+
+  if(data.imageUrl){
+    return data.imageUrl;
+  }
+
+  return "https://via.placeholder.com/800x500?text=SR+Nest";
+
+}
+
+function getImages(data){
+
+  if(
+    Array.isArray(data.imageUrls) &&
+    data.imageUrls.length
+  ){
+    return data.imageUrls.slice(0,3);
+  }
+
+  if(data.imageUrl){
+    return [data.imageUrl];
+  }
+
+  return [
+    "https://via.placeholder.com/800x500?text=SR+Nest"
+  ];
+
+}
+
+/* ================= NAVIGATION ================= */
+
+history.replaceState(
+  {pageNum:1},
+  "",
+  location.href
+);
+
+function renderTabUI(pageNum){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(page =>
+      page.classList.remove("active")
+    );
+
+  document
+    .querySelectorAll(".nav-item")
+    .forEach(item =>
+      item.classList.remove("active")
+    );
+
+  const page =
+    $(`page-${pageNum}`);
+
+  const tab =
+    $(`tab-${pageNum}`);
+
+  if(page){
+    page.classList.add("active");
+  }
+
+  if(tab){
+    tab.classList.add("active");
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:"instant"
+  });
+
+  if(pageNum === 5){
+
+    if(allListings.length === 0){
+      loadProperties();
+    }else{
+      applyFilters();
+    }
+
+  }
+
+  if(pageNum === 6){
+    renderSavedProperties();
+  }
+
+  if(pageNum === 4){
+
+    setTimeout(() => {
+
+      initPickerMap();
+
+      if(pickerMap){
+        pickerMap.invalidateSize();
+      }
+
+    },250);
+
+    if(currentUser){
+
+      loadOwnerRequests();
+      loadMyListedHouses();
+
+    }
+
+  }
+
+}
+
+window.switchTab =
+function(pageNum,isBackAction=false){
+
+  if(!isBackAction){
+
+    history.pushState(
+      {pageNum},
+      "",
+      location.href.split("#")[0] + `#page-${pageNum}`
+    );
+
+  }
+
+  renderTabUI(pageNum);
+
+};
+
+window.onpopstate =
+function(event){
+
+  const pageNum =
+    event.state?.pageNum || 1;
+
+  renderTabUI(pageNum);
+
+};
+
+/* ================= AUTH ================= */
+
+window.checkAuthAndGoList =
+function(){
+
+  if(currentUser){
+
+    switchTab(4);
+
+  }else{
+
+    alert("Please sign in first.");
+    switchTab(8);
+
+  }
+
+};
+
+onAuthStateChanged(
+  auth,
+  user => {
+
+    currentUser = user;
+
+    if(user){
+
+      $("auth-logged-out").style.display="none";
+      $("auth-logged-in").style.display="block";
+
+      $("user-display-name").textContent =
+        user.displayName || "SR Nest User";
+
+      $("user-display-info").textContent =
+        user.email || "";
+
+      if(
+        $("page-4").classList.contains("active")
+      ){
+
+        loadOwnerRequests();
+        loadMyListedHouses();
+
+      }
+
+    }else{
+
+      $("auth-logged-out").style.display="block";
+      $("auth-logged-in").style.display="none";
+
+    }
+
+  }
+);
+
+window.loginWithGoogle =
+async function(){
+
+  try{
+
+    const provider =
+      new GoogleAuthProvider();
+
+    await signInWithPopup(
+      auth,
+      provider
+    );
+
+    alert("✅ Signed in successfully!");
+
+    switchTab(1);
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Login failed: " +
+      (error.message || "Please try again.")
+    );
+
+  }
+
+};
+
+window.logoutUser =
+async function(){
+
+  try{
+
+    await signOut(auth);
+
+    switchTab(1);
+
+  }catch(error){
+
+    alert(
+      "Sign out failed: " +
+      error.message
+    );
+
+  }
+
+};
+
+/* ================= PICKER MAP ================= */
+
+function initPickerMap(){
+
+  if(pickerMap){
+    return;
+  }
+
+  const defaultLat = 17.3850;
+  const defaultLng = 78.4867;
+
+  pickerMap =
+    L.map("picker-map")
+      .setView(
+        [defaultLat,defaultLng],
+        12
+      );
+
+  L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom:19,
+      attribution:"© OpenStreetMap"
+    }
+  ).addTo(pickerMap);
+
+  pickerMarker =
+    L.marker(
+      [defaultLat,defaultLng],
+      {draggable:true}
+    ).addTo(pickerMap);
+
+  $("prop-lat").value =
+    defaultLat;
+
+  $("prop-lng").value =
+    defaultLng;
+
+  pickerMap.on(
+    "click",
+    event => {
+
+      setPickerLocation(
+        event.latlng.lat,
+        event.latlng.lng
+      );
+
+    }
+  );
+
+  pickerMarker.on(
+    "dragend",
+    () => {
+
+      const position =
+        pickerMarker.getLatLng();
+
+      setPickerLocation(
+        position.lat,
+        position.lng
+      );
+
+    }
+  );
+
+}
+
+function setPickerLocation(lat,lng){
+
+  if(pickerMarker){
+
+    pickerMarker.setLatLng(
+      [lat,lng]
+    );
+
+  }
+
+  if(pickerMap){
+
+    pickerMap.setView(
+      [lat,lng],
+      Math.max(
+        pickerMap.getZoom(),
+        15
+      )
+    );
+
+  }
+
+  $("prop-lat").value =
+    Number(lat).toFixed(7);
+
+  $("prop-lng").value =
+    Number(lng).toFixed(7);
+
+}
+
+window.getCurrentGPSLocation =
+function(){
+
+  if(!navigator.geolocation){
+
+    alert(
+      "Location services are not supported by this browser."
+    );
+
+    return;
+
+  }
+
+  if(!pickerMap){
+
+    initPickerMap();
+
+  }
+
+  navigator.geolocation.getCurrentPosition(
+
+    position => {
+
+      setPickerLocation(
+        position.coords.latitude,
+        position.coords.longitude
+      );
+
+      alert(
+        "📍 Location selected successfully!"
+      );
+
+    },
+
+    error => {
+
+      let message =
+        "Could not get your location.";
+
+      if(error.code === 1){
+        message =
+          "Location permission was denied.";
+      }
+
+      alert(message);
+
+    },
+
+    {
+      enableHighAccuracy:true,
+      timeout:10000,
+      maximumAge:30000
+    }
+
+  );
+
+};
+
+/* ================= FILTERS ================= */
+
+function populateLocationFilter(){
+
+  const select =
+    $("filter-location");
+
+  const current =
+    select.value;
+
+  const locations =
+    [...new Set(
+      allListings
+        .map(item =>
+          String(item.location || "").trim()
+        )
+        .filter(Boolean)
+    )]
+    .sort(
+      (a,b) =>
+        a.localeCompare(
+          b,
+          undefined,
+          {sensitivity:"base"}
+        )
+    );
+
+  select.innerHTML =
+    `<option value="">Any Location</option>`;
+
+  locations.forEach(location => {
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      location;
+
+    option.textContent =
+      location;
+
+    select.appendChild(option);
+
+  });
+
+  if(
+    locations.includes(current)
+  ){
+    select.value=current;
+  }
+
+}
+
+function getFilteredListings(){
+
+  const search =
+    $("search-input")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const bhk =
+    $("filter-bhk").value;
+
+  const minRent =
+    Number(
+      $("filter-min-rent").value
+    ) || 0;
+
+  const maxRent =
+    Number(
+      $("filter-max-rent").value
+    ) || Infinity;
+
+  const location =
+    $("filter-location").value;
+
+  const sort =
+    $("filter-sort").value;
+
+  let result =
+    allListings.filter(data => {
+
+      const rent =
+        Number(data.rent) || 0;
+
+      const searchable = [
+        data.bhk,
+        data.location,
+        data.ownerName,
+        data.description
+      ]
+      .join(" ")
+      .toLowerCase();
+
+      const searchOK =
+        !search ||
+        searchable.includes(search);
+
+      const bhkOK =
+        !bhk ||
+        String(data.bhk || "")
+          .toLowerCase() ===
+          bhk.toLowerCase();
+
+      const minOK =
+        rent >= minRent;
+
+      const maxOK =
+        rent <= maxRent;
+
+      const locationOK =
+        !location ||
+        String(data.location || "")
+          .toLowerCase() ===
+          location.toLowerCase();
+
+      return (
+        searchOK &&
+        bhkOK &&
+        minOK &&
+        maxOK &&
+        locationOK
+      );
+
+    });
+
+  if(sort === "low"){
+
+    result.sort(
+      (a,b) =>
+        (Number(a.rent)||0) -
+        (Number(b.rent)||0)
+    );
+
+  }else if(sort === "high"){
+
+    result.sort(
+      (a,b) =>
+        (Number(b.rent)||0) -
+        (Number(a.rent)||0)
+    );
+
+  }else if(sort === "bhk"){
+
+    result.sort(
+      (a,b) =>
+        parseInt(a.bhk)||0 -
+        (parseInt(b.bhk)||0)
+    );
+
+  }else{
+
+    result.sort(
+      (a,b) =>
+        String(
+          b.createdAt || ""
+        ).localeCompare(
+          String(a.createdAt || "")
+        )
+    );
+
+  }
+
+  return result;
+
+}
+
+window.applyFilters =
+function(){
+
+  filteredListings =
+    getFilteredListings();
+
+  renderListings(
+    filteredListings,
+    $("homes-container")
+  );
+
+  $("results-count").innerHTML =
+    `<strong>${filteredListings.length}</strong> properties found`;
+
+};
+
+window.clearFilters =
+function(){
+
+  $("search-input").value="";
+  $("filter-bhk").value="";
+  $("filter-min-rent").value="";
+  $("filter-max-rent").value="";
+  $("filter-sort").value="newest";
+  $("filter-location").value="";
+
+  applyFilters();
+
+};
+
+window.quickBhk =
+function(bhk){
+
+  $("filter-bhk").value =
+    bhk;
+
+  applyFilters();
+
+};
+
+/* Search automatically while typing */
+
+[
+  "search-input",
+  "filter-bhk",
+  "filter-min-rent",
+  "filter-max-rent",
+  "filter-sort",
+  "filter-location"
+]
+.forEach(id => {
+
+  $(id)?.addEventListener(
+    "input",
+    applyFilters
+  );
+
+  $(id)?.addEventListener(
+    "change",
+    applyFilters
+  );
+
+});
+
+/* ================= PROPERTY CARD ================= */
+
+function renderListings(list,container){
+
+  container.innerHTML="";
+
+  if(!list.length){
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          🏠
+        </div>
+
+        <h3>
+          No properties found
+        </h3>
+
+        <p>
+          Try changing your search or filters.
+        </p>
+
+        <button
+          class="btn btn-ghost btn-sm"
+          style="margin-top:15px;"
+          onclick="clearFilters()">
+          Clear Filters
+        </button>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+  list.forEach(data => {
+
+    const card =
+      document.createElement("article");
+
+    card.className =
+      "house-card";
+
+    const images =
+      getImages(data);
+
+    const saved =
+      savedHouseIds.includes(
+        data.id
+      );
+
+    const title =
+      data.bhk ||
+      "Rental Home";
+
+    const location =
+      data.location ||
+      "Location not provided";
+
+    card.innerHTML = `
+
+      <div class="house-img">
+
+        <img
+          src="${escapeHTML(imageFor(data))}"
+          alt="${escapeHTML(title)}"
+          loading="lazy"
+        />
+
+        <button
+          class="fav-btn ${saved ? "saved" : ""}"
+          aria-label="Save property"
+          type="button">
+
+          ${saved ? "❤️" : "🤍"}
+
+        </button>
+
+        ${
+          images.length > 1
+          ? `
+            <div class="image-count">
+              📷 ${images.length} photos
+            </div>
+          `
+          : ""
+        }
+
+      </div>
+
+      <div class="card-body">
+
+        <div class="card-top">
+
+          <div>
+
+            <div class="card-title">
+              ${escapeHTML(title)}
+            </div>
+
+            <div class="price">
+              ${formatRent(data.rent)}
+              <small>/month</small>
+            </div>
+
+          </div>
+
+          <span class="bhk-badge">
+            ${escapeHTML(title)}
+          </span>
+
+        </div>
+
+        <div
+          class="location"
+          title="${escapeHTML(location)}">
+
+          📍 ${escapeHTML(location)}
+
+        </div>
+
+        <div class="card-actions">
+
+          <button
+            class="btn btn-primary card-view"
+            type="button">
+            👁️ View Details & Map
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+    const fav =
+      card.querySelector(".fav-btn");
+
+    fav.addEventListener(
+      "click",
+      event => {
+
+        event.stopPropagation();
+
+        toggleSaveHouse(
+          data.id
+        );
+
+      }
+    );
+
+    card.addEventListener(
+      "click",
+      () => {
+
+        openDetailsModal(
+          data.id
+        );
+
+      }
+    );
+
+    container.appendChild(card);
+
+  });
+
+}
+
+function createMyListingCard(data){
+
+  const card =
+    document.createElement("article");
+
+  card.className =
+    "house-card";
+
+  card.innerHTML = `
+
+    <div class="house-img">
+
+      <img
+        src="${escapeHTML(imageFor(data))}"
+        alt="Property"
+        loading="lazy"
+      />
+
+    </div>
+
+    <div class="card-body">
+
+      <div class="card-title">
+        ${escapeHTML(data.bhk || "Rental Home")}
+      </div>
+
+      <div class="price">
+        ${formatRent(data.rent)}
+        <small>/month</small>
+      </div>
+
+      <div class="location">
+        📍 ${escapeHTML(data.location || "")}
+      </div>
+
+      <button
+        class="btn btn-primary"
+        style="width:100%;"
+        type="button">
+        👁️ View Property
+      </button>
+
+    </div>
+  `;
+
+  card.addEventListener(
+    "click",
+    () =>
+      openDetailsModal(
+        data.id
+      )
+  );
+
+  return card;
+
+}
+
+/* ================= LOAD PROPERTIES ================= */
+
+async function loadProperties(){
+
+  const container =
+    $("homes-container");
+
+  try{
+
+    const snapshot =
+      await getDocs(
+        collection(
+          db,
+          "listings"
+        )
+      );
+
+    allListings=[];
+
+    snapshot.forEach(
+      docSnap => {
+
+        allListings.push({
+          id:docSnap.id,
+          ...docSnap.data()
+        });
+
+      }
+    );
+
+    populateLocationFilter();
+
+    $("hero-property-count")
+      .textContent =
+      allListings.length + "+";
+
+    applyFilters();
+
+  }catch(error){
+
+    console.error(error);
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ⚠️
+        </div>
+
+        <h3>
+          Could not load properties
+        </h3>
+
+        <p>
+          Please check your internet connection and try again.
+        </p>
+
+        <button
+          class="btn btn-primary btn-sm"
+          style="margin-top:15px;"
+          onclick="loadProperties()">
+          🔄 Try Again
+        </button>
+
+      </div>
+    `;
+
+    $("results-count")
+      .textContent =
+      "Unable to load properties";
+
+  }
+
+}
+
+/* ================= SAVED PROPERTIES ================= */
+
+window.toggleSaveHouse =
+function(id){
+
+  if(savedHouseIds.includes(id)){
+
+    savedHouseIds =
+      savedHouseIds.filter(
+        savedId =>
+          savedId !== id
+      );
+
+  }else{
+
+    savedHouseIds.push(id);
+
+  }
+
+  localStorage.setItem(
+    "srnest_saved",
+    JSON.stringify(
+      savedHouseIds
+    )
+  );
+
+  applyFilters();
+  renderSavedProperties();
+
+};
+
+function renderSavedProperties(){
+
+  const container =
+    $("saved-homes-container");
+
+  const saved =
+    allListings.filter(
+      item =>
+        savedHouseIds.includes(
+          item.id
+        )
+    );
+
+  if(!saved.length){
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ❤️
+        </div>
+
+        <h3>
+          No saved homes yet
+        </h3>
+
+        <p>
+          Tap ❤️ on a property to save it.
+        </p>
+
+        <button
+          class="btn btn-primary btn-sm"
+          style="margin-top:15px;"
+          onclick="switchTab(5)">
+          🔍 Browse Homes
+        </button>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+  renderListings(
+    saved,
+    container
+  );
+
+}
+
+/* ================= PROPERTY DETAILS ================= */
+
+window.openDetailsModal =
+function(id){
+
+  const data =
+    allListings.find(
+      item => item.id === id
+    );
+
+  if(!data){
+    return;
+  }
+
+  const images =
+    getImages(data);
+
+  $("detail-main-img").src =
+    images[0];
+
+  $("detail-main-img").alt =
+    data.bhk || "Rental Home";
+
+  const gallery =
+    $("detail-gallery");
+
+  gallery.innerHTML="";
+
+  images.forEach(
+    (url,index) => {
+
+      const img =
+        document.createElement("img");
+
+      img.src=url;
+      img.alt="Property image";
+
+      if(index === 0){
+        img.classList.add("active");
+      }
+
+      img.addEventListener(
+        "click",
+        () => {
+
+          $("detail-main-img").src =
+            url;
+
+          gallery
+            .querySelectorAll("img")
+            .forEach(
+              item =>
+                item.classList.remove("active")
+            );
+
+          img.classList.add("active");
+
+        }
+      );
+
+      gallery.appendChild(img);
+
+    }
+  );
+
+  $("detail-title")
+    .textContent =
+    data.bhk ||
+    "Rental Home";
+
+  $("detail-price")
+    .textContent =
+    formatRent(data.rent);
+
+  $("detail-loc")
+    .textContent =
+    "📍 " +
+    (
+      data.location ||
+      "Location not provided"
+    );
+
+  $("detail-desc")
+    .textContent =
+    data.description ||
+    "No description provided by owner.";
+
+  const phone =
+    cleanPhone(data.phone);
+
+  $("detail-call-btn").href =
+    phone
+      ? `tel:${phone}`
+      : "#";
+
+  $("detail-wa-btn").href =
+    phone
+      ? `https://wa.me/91${phone}?text=${
+          encodeURIComponent(
+            `Hi! I am interested in your ${
+              data.bhk || "rental property"
+            } in ${
+              data.location || ""
+            } listed on SR Nest.`
+          )
+        }`
+      : "#";
+
+  $("detail-book-btn").onclick =
+    () => {
+
+      closeDetailsModal();
+
+      openBookingModal(
+        data.id,
+        data.phone,
+        data.ownerUid
+      );
+
+    };
+
+  $("details-modal")
+    .classList.add("active");
+
+  setTimeout(
+    () => {
+
+      const lat =
+        Number(data.lat) || 17.3850;
+
+      const lng =
+        Number(data.lng) || 78.4867;
+
+      if(!detailMap){
+
+        detailMap =
+          L.map("detail-map")
+            .setView(
+              [lat,lng],
+              15
+            );
+
+        L.tileLayer(
+          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          {
+            maxZoom:19,
+            attribution:"© OpenStreetMap"
+          }
+        ).addTo(detailMap);
+
+        detailMarker =
+          L.marker(
+            [lat,lng]
+          ).addTo(detailMap);
+
+      }else{
+
+        detailMap.setView(
+          [lat,lng],
+          15
+        );
+
+        detailMarker.setLatLng(
+          [lat,lng]
+        );
+
+      }
+
+      detailMap.invalidateSize();
+
+    },
+    250
+  );
+
+};
+
+window.closeDetailsModal =
+function(){
+
+  $("details-modal")
+    .classList.remove("active");
+
+};
+
+/* ================= BOOKING ================= */
+
+window.openBookingModal =
+function(
+  houseId,
+  ownerPhone,
+  ownerUid
+){
+
+  if(!currentUser){
+
+    alert(
+      "Please sign in before booking a house visit."
+    );
+
+    switchTab(8);
+
+    return;
+
+  }
+
+  $("book-house-id").value =
+    houseId;
+
+  $("book-owner-phone").value =
+    ownerPhone || "";
+
+  $("book-owner-uid").value =
+    ownerUid || "";
+
+  const dateInput =
+    $("tenant-date");
+
+  const today =
+    new Date()
+      .toISOString()
+      .split("T")[0];
+
+  dateInput.min =
+    today;
+
+  $("booking-modal")
+    .classList.add("active");
+
+};
+
+window.closeBookingModal =
+function(){
+
+  $("booking-modal")
+    .classList.remove("active");
+
+};
+
+/* ================= BOOKING SUBMIT ================= */
+
+$("booking-form")
+  .addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+      if(!currentUser){
+
+        alert(
+          "Please sign in first."
+        );
+
+        return;
+
+      }
+
+      const button =
+        $("booking-submit-btn");
+
+      button.disabled=true;
+      button.textContent=
+        "Sending...";
+
+      try{
+
+        await addDoc(
+          collection(
+            db,
+            "bookings"
+          ),
+          {
+
+            houseId:
+              $("book-house-id").value,
+
+            ownerPhone:
+              $("book-owner-phone").value,
+
+            ownerUid:
+              $("book-owner-uid").value,
+
+            tenantUid:
+              currentUser.uid,
+
+            tenantName:
+              $("tenant-name")
+                .value
+                .trim(),
+
+            tenantPhone:
+              $("tenant-phone")
+                .value
+                .trim(),
+
+            visitDate:
+              $("tenant-date")
+                .value,
+
+            status:"Pending",
+
+            createdAt:
+              new Date().toISOString()
+
+          }
+        );
+
+        alert(
+          "🎉 Booking request sent successfully!"
+        );
+
+        $("booking-form").reset();
+
+        closeBookingModal();
+
+      }catch(error){
+
+        console.error(error);
+
+        alert(
+          "Could not send request: " +
+          error.message
+        );
+
+      }finally{
+
+        button.disabled=false;
+        button.textContent=
+          "🚀 Send Request";
+
+      }
+
+    }
+  );
+
+/* ================= OWNER REQUESTS ================= */
+
+async function loadOwnerRequests(){
+
+  if(!currentUser){
+    return;
+  }
+
+  const container =
+    $("booking-requests-container");
+
+  try{
+
+    const q =
+      query(
+        collection(
+          db,
+          "bookings"
+        ),
+        where(
+          "ownerUid",
+          "==",
+          currentUser.uid
+        )
+      );
+
+    const snapshot =
+      await getDocs(q);
+
+    const requests=[];
+
+    snapshot.forEach(
+      snap => {
+
+        requests.push({
+          id:snap.id,
+          ...snap.data()
+        });
+
+      }
+    );
+
+    requests.sort(
+      (a,b) =>
+        String(
+          b.createdAt || ""
+        ).localeCompare(
+          String(
+            a.createdAt || ""
+          )
+        )
+    );
+
+    if(!requests.length){
+
+      container.innerHTML = `
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            🔔
+          </div>
+
+          <h3>
+            No booking requests
+          </h3>
+
+          <p>
+            New visitor requests will appear here.
+          </p>
+
+        </div>
+      `;
+
+      return;
+
+    }
+
+    container.innerHTML="";
+
+    requests.forEach(
+      request => {
+
+        const card =
+          document.createElement("div");
+
+        card.className =
+          "request-card";
+
+        const status =
+          String(
+            request.status ||
+            "Pending"
+          );
+
+        const statusClass =
+          status.toLowerCase();
+
+        card.innerHTML = `
+
+          <div class="request-top">
+
+            <strong>
+              👤 ${escapeHTML(
+                request.tenantName ||
+                "Visitor"
+              )}
+            </strong>
+
+            <span class="status ${escapeHTML(statusClass)}">
+              ${escapeHTML(status)}
+            </span>
+
+          </div>
+
+          <div class="request-info">
+
+            📞 Phone:
+            <a
+              href="tel:${escapeHTML(request.tenantPhone || "")}"
+              style="color:#38BDF8;">
+              ${escapeHTML(
+                request.tenantPhone ||
+                "Not provided"
+              )}
+            </a>
+
+            <br/>
+
+            📅 Visit Date:
+            ${escapeHTML(
+              request.visitDate ||
+              "Not selected"
+            )}
+
+          </div>
+
+          ${
+            status === "Pending"
+            ? `
+              <div class="request-actions">
+
+                <button
+                  class="btn btn-green btn-sm accept-btn">
+                  ✅ Accept
+                </button>
+
+                <button
+                  class="btn btn-danger btn-sm reject-btn">
+                  ❌ Reject
+                </button>
+
+              </div>
+            `
+            : ""
+          }
+
+        `;
+
+        const accept =
+          card.querySelector(
+            ".accept-btn"
+          );
+
+        const reject =
+          card.querySelector(
+            ".reject-btn"
+          );
+
+        if(accept){
+
+          accept.addEventListener(
+            "click",
+            () =>
+              updateBookingStatus(
+                request.id,
+                "Accepted",
+                request.tenantPhone
+              )
+          );
+
+        }
+
+        if(reject){
+
+          reject.addEventListener(
+            "click",
+            () =>
+              updateBookingStatus(
+                request.id,
+                "Rejected",
+                request.tenantPhone
+              )
+          );
+
+        }
+
+        container.appendChild(card);
+
+      }
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠️</div>
+        <p>Could not load booking requests.</p>
+      </div>
+    `;
+
+  }
+
+}
+
+/* ================= UPDATE BOOKING ================= */
+
+async function updateBookingStatus(
+  bookingId,
+  status,
+  tenantPhone
+){
+
+  try{
+
+    await updateDoc(
+      doc(
+        db,
+        "bookings",
+        bookingId
+      ),
+      {
+        status
+      }
+    );
+
+    alert(
+      `Booking request ${status}.`
+    );
+
+    if(
+      status === "Accepted"
+    ){
+
+      const phone =
+        cleanPhone(
+          tenantPhone
+        );
+
+      if(phone){
+
+        const message =
+          encodeURIComponent(
+            "Hi! Your SR Nest house visit request has been ACCEPTED by the owner."
+          );
+
+        window.open(
+          `https://wa.me/91${phone}?text=${message}`,
+          "_blank"
+        );
+
+      }
+
+    }
+
+    loadOwnerRequests();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Could not update booking: " +
+      error.message
+    );
+
+  }
+
+}
+
+window.updateBookingStatus =
+updateBookingStatus;
+
+/* ================= MY LISTINGS ================= */
+
+async function loadMyListedHouses(){
+
+  if(!currentUser){
+    return;
+  }
+
+  const container =
+    $("my-houses-container");
+
+  try{
+
+    const q =
+      query(
+        collection(
+          db,
+          "listings"
+        ),
+        where(
+          "ownerUid",
+          "==",
+          currentUser.uid
+        )
+      );
+
+    const snapshot =
+      await getDocs(q);
+
+    const houses=[];
+
+    snapshot.forEach(
+      snap => {
+
+        houses.push({
+          id:snap.id,
+          ...snap.data()
+        });
+
+      }
+    );
+
+    houses.sort(
+      (a,b) =>
+        String(
+          b.createdAt || ""
+        ).localeCompare(
+          String(
+            a.createdAt || ""
+          )
+        )
+    );
+
+    if(!houses.length){
+
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🏠</div>
+          <h3>No properties yet</h3>
+          <p>Use the form below to publish your first rental property.</p>
+        </div>
+      `;
+
+      return;
+
+    }
+
+    container.innerHTML="";
+
+    houses.forEach(
+      data =>
+        container.appendChild(
+          createMyListingCard(data)
+        )
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠️</div>
+        <p>Could not load your properties.</p>
+      </div>
+    `;
+
+  }
+
+}
+
+/* ================= IMAGE COMPRESSION ================= */
+
+function compressImage(
+  file,
+  maxSize=1200,
+  quality=.72
+){
+
+  return new Promise(
+    (resolve,reject) => {
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        event => {
+
+          const image =
+            new Image();
+
+          image.onload =
+            () => {
+
+              let width =
+                image.width;
+
+              let height =
+                image.height;
+
+              if(
+                width > maxSize ||
+                height > maxSize
+              ){
+
+                const ratio =
+                  Math.min(
+                    maxSize / width,
+                    maxSize / height
+                  );
+
+                width =
+                  Math.round(
+                    width * ratio
+                  );
+
+                height =
+                  Math.round(
+                    height * ratio
+                  );
+
+              }
+
+              const canvas =
+                document.createElement(
+                  "canvas"
+                );
+
+              canvas.width =
+                width;
+
+              canvas.height =
+                height;
+
+              const ctx =
+                canvas.getContext(
+                  "2d"
+                );
+
+              ctx.drawImage(
+                image,
+                0,
+                0,
+                width,
+                height
+              );
+
+              resolve(
+                canvas.toDataURL(
+                  "image/jpeg",
+                  quality
+                )
+              );
+
+            };
+
+          image.onerror =
+            reject;
+
+          image.src =
+            event.target.result;
+
+        };
+
+      reader.onerror =
+        reject;
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+}
+
+/* ================= PROPERTY FORM ================= */
+
+$("property-form")
+  .addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+      if(!currentUser){
+
+        alert(
+          "Please sign in before posting a property."
+        );
+
+        switchTab(8);
+
+        return;
+
+      }
+
+      const files =
+        Array.from(
+          $("prop-images").files
+        ).slice(0,3);
+
+      if(!files.length){
+
+        alert(
+          "Please select at least one property image."
+        );
+
+        return;
+
+      }
+
+      const phone =
+        cleanPhone(
+          $("prop-phone").value
+        );
+
+      if(
+        phone.length < 10
+      ){
+
+        alert(
+          "Please enter a valid phone number."
+        );
+
+        return;
+
+      }
+
+      const rent =
+        Number(
+          $("prop-rent").value
+        );
+
+      if(
+        !Number.isFinite(rent) ||
+        rent <= 0
+      ){
+
+        alert(
+          "Please enter a valid monthly rent."
+        );
+
+        return;
+
+      }
+
+      const button =
+        $("submit-btn");
+
+      button.disabled=true;
+
+      try{
+
+        button.textContent =
+          "🖼️ Compressing images...";
+
+        const imageUrls=[];
+
+        for(
+          let i=0;
+          i<files.length;
+          i++
+        ){
+
+          button.textContent =
+            `🖼️ Processing image ${i+1}/${files.length}...`;
+
+          const compressed =
+            await compressImage(
+              files[i]
+            );
+
+          imageUrls.push(
+            compressed
+          );
+
+        }
+
+        button.textContent =
+          "🚀 Publishing...";
+
+        const lat =
+          Number(
+            $("prop-lat").value
+          ) || 17.3850;
+
+        const lng =
+          Number(
+            $("prop-lng").value
+          ) || 78.4867;
+
+        await addDoc(
+          collection(
+            db,
+            "listings"
+          ),
+          {
+
+            ownerUid:
+              currentUser.uid,
+
+            ownerName:
+              $("prop-owner")
+                .value
+                .trim(),
+
+            phone,
+
+            location:
+              $("prop-location")
+                .value
+                .trim(),
+
+            rent:
+
+              String(rent),
+
+            bhk:
+              $("prop-bhk")
+                .value,
+
+            description:
+              $("prop-desc")
+                .value
+                .trim(),
+
+            lat,
+            lng,
+
+            imageUrls,
+
+            createdAt:
+              new Date().toISOString()
+
+          }
+        );
+
+        alert(
+          "🎉 Property published successfully!"
+        );
+
+        $("property-form")
+          .reset();
+
+        if(
+          pickerMap
+        ){
+
+          const defaultLat =
+            17.3850;
+
+          const defaultLng =
+            78.4867;
+
+          setPickerLocation(
+            defaultLat,
+            defaultLng
+          );
+
+        }
+
+        await loadProperties();
+
+        await loadMyListedHouses();
+
+        switchTab(4);
+
+      }catch(error){
+
+        console.error(error);
+
+        alert(
+          "Could not publish property: " +
+          error.message
+        );
+
+      }finally{
+
+        button.disabled=false;
+
+        button.textContent =
+          "🚀 Publish Property";
+
+      }
+
+    }
+  );
+
+/* ================= MODAL CLICK OUTSIDE ================= */
+
+document
+  .querySelectorAll(".modal")
+  .forEach(modal => {
+
+    modal.addEventListener(
+      "click",
+      event => {
+
+        if(
+          event.target === modal
+        ){
+
+          modal.classList.remove(
+            "active"
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+/* ================= ESC KEY ================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key !== "Escape"){
+      return;
+    }
+
+    document
+      .querySelectorAll(".modal.active")
+      .forEach(
+        modal =>
+          modal.classList.remove(
+            "active"
+          )
+      );
+
+  }
+);
+
+/* ================= INITIAL LOAD ================= */
+
+loadProperties();
+
+/* ================= DEFAULT BOOKING DATE ================= */
+
+const today =
+  new Date()
+    .toISOString()
+    .split("T")[0];
+
+$("tenant-date").min =
+  today;
+
+</script>
+
+</body>
+</html>
