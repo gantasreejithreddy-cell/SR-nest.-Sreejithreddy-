@@ -948,8 +948,9 @@
     const queryStr = document.getElementById('search-input').value.toLowerCase().trim();
 
     currentFilteredListings = allListings.filter(item => {
-      const matchSearch = (item.location && item.location.toLowerCase().includes(queryStr)) ||
-                          (item.bhk && item.bhk.toLowerCase().includes(queryStr));
+      const loc = (item.location || item.address || '').toLowerCase();
+      const bhk = (item.bhk || '').toLowerCase();
+      const matchSearch = loc.includes(queryStr) || bhk.includes(queryStr);
       const matchBhk = (selectedBhkFilter === 'All') || (item.bhk === selectedBhkFilter);
       return matchSearch && matchBhk;
     });
@@ -997,12 +998,16 @@
     items.forEach(data => {
       if(data.lat && data.lng) {
         const marker = L.marker([data.lat, data.lng]).addTo(browseMap);
+        const bhkStr = data.bhk || 'Rental Home';
+        const rentStr = data.rent || data.price || '0';
+        const locStr = data.location || data.address || 'Hyderabad';
         const gmapsDirectUrl = `https://www.google.com/maps/search/?api=1&query=${data.lat},${data.lng}`;
+
         marker.bindPopup(`
           <div style="font-family:'Plus Jakarta Sans'; color:#0F172A;">
-            <strong>${data.bhk}</strong><br/>
-            <span>₹${data.rent}/mo</span><br/>
-            <small>${data.location}</small><br/>
+            <strong>${bhkStr}</strong><br/>
+            <span>₹${rentStr}/mo</span><br/>
+            <small>${locStr}</small><br/>
             <div style="display:flex; gap:6px; margin-top:6px;">
               <button onclick="window.openDetailsModal('${data.id}')" style="background:#6366F1; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-weight:700; cursor:pointer;">Details</button>
               <a href="${gmapsDirectUrl}" target="_blank" style="background:#0284C7; color:#FFF; text-decoration:none; padding:4px 8px; border-radius:6px; font-weight:700; font-size:12px;">Google Maps</a>
@@ -1029,7 +1034,6 @@
     }
   };
 
-  /* Direct Google Maps Link Generator */
   window.openGoogleMaps = function(lat, lng, event) {
     if(event) event.stopPropagation();
     const latitude = lat || 17.3850;
@@ -1042,7 +1046,7 @@
     const data = allListings.find(item => item.id === id);
     if(!data) return;
 
-    const images = data.imageUrls || [data.imageUrl || 'https://via.placeholder.com/300x200'];
+    const images = data.imageUrls || (data.imageUrl ? [data.imageUrl] : ['https://via.placeholder.com/300x200']);
     const mainImg = document.getElementById('detail-main-img');
     mainImg.src = images[0];
 
@@ -1061,8 +1065,8 @@
     });
 
     document.getElementById('detail-title').innerText = data.bhk || 'Rental Home';
-    document.getElementById('detail-price').innerText = `₹${data.rent}/month`;
-    document.getElementById('detail-loc').innerText = `📍 ${data.location}`;
+    document.getElementById('detail-price').innerText = `₹${data.rent || data.price || '0'}/month`;
+    document.getElementById('detail-loc').innerText = `📍 ${data.location || data.address || 'Hyderabad'}`;
     document.getElementById('detail-desc').innerText = data.description || 'No description provided by owner.';
 
     const lat = data.lat || 17.3850;
@@ -1081,13 +1085,14 @@
       });
     }
 
-    document.getElementById('detail-share-btn').onclick = (e) => shareListing(data.bhk, data.location, data.id, e);
-    document.getElementById('detail-call-btn').href = `tel:${data.phone}`;
-    document.getElementById('detail-wa-btn').href = `https://wa.me/91${data.phone}?text=${encodeURIComponent(`Hi! I am interested in your ${data.bhk} in ${data.location} listed on SR Nest.`)}`;
+    const phone = data.phone || '9063576302';
+    document.getElementById('detail-share-btn').onclick = (e) => shareListing(data.bhk || 'Rental', data.location || 'Hyderabad', data.id, e);
+    document.getElementById('detail-call-btn').href = `tel:${phone}`;
+    document.getElementById('detail-wa-btn').href = `https://wa.me/91${phone}?text=${encodeURIComponent(`Hi! I am interested in your ${data.bhk || 'property'} in ${data.location || 'Hyderabad'} listed on SR Nest.`)}`;
     
     document.getElementById('detail-book-btn').onclick = () => {
       closeDetailsModal();
-      openBookingModal(data.id, data.phone, data.ownerUid);
+      openBookingModal(data.id, phone, data.ownerUid);
     };
 
     document.getElementById('details-modal').classList.add('active');
@@ -1236,16 +1241,19 @@
         const card = document.createElement('div');
         card.className = 'house-card';
         const displayImg = (data.imageUrls && data.imageUrls[0]) || data.imageUrl || 'https://via.placeholder.com/300x200';
+        const rentVal = data.rent || data.price || '0';
+        const locVal = data.location || data.address || 'Hyderabad';
+
         card.innerHTML = `
           <div class="house-img-box">
             <img src="${displayImg}" alt="House"/>
           </div>
           <div class="house-info">
             <h4>${data.bhk || 'Rental Home'}</h4>
-            <div class="price">₹${data.rent}/month</div>
-            <div class="loc">📍 ${data.location}</div>
+            <div class="price">₹${rentVal}/month</div>
+            <div class="loc">📍 ${locVal}</div>
             <div style="display:flex; gap:8px; margin-top:8px;">
-              <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="editRent('${data.id}', '${data.rent}', event)">✏️ Edit Rent</button>
+              <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="editRent('${data.id}', '${rentVal}', event)">✏️ Edit Rent</button>
               <button class="btn btn-accent btn-sm" style="flex:1;" onclick="deleteListing('${data.id}', event)">🗑️ Delete</button>
             </div>
           </div>
@@ -1319,24 +1327,26 @@
       card.className = 'house-card';
       card.onclick = () => openDetailsModal(data.id);
       const displayImg = (data.imageUrls && data.imageUrls[0]) || data.imageUrl || 'https://via.placeholder.com/300x200';
+      const rentVal = data.rent || data.price || '0';
+      const locVal = data.location || data.address || 'Hyderabad';
 
       card.innerHTML = `
         <div class="house-img-box">
           <img src="${displayImg}" alt="House"/>
-          <button class="card-share-btn" onclick="shareListing('${data.bhk}', '${data.location}', '${data.id}', event)">🔗</button>
+          <button class="card-share-btn" onclick="shareListing('${data.bhk || 'Rental'}', '${locVal}', '${data.id}', event)">🔗</button>
           <button class="fav-btn ${isSaved ? 'active' : ''}" onclick="toggleSaveHouse('${data.id}', event)">
             ${isSaved ? '❤️' : '🤍'}
           </button>
         </div>
         <div class="house-info">
           <h4>${data.bhk || 'Rental Home'}</h4>
-          <div class="price">₹${data.rent}/month</div>
-          <div class="loc">📍 ${data.location}</div>
+          <div class="price">₹${rentVal}/month</div>
+          <div class="loc">📍 ${locVal}</div>
           <div style="display:flex; gap:8px; margin-top: auto;">
             <button class="btn btn-gradient btn-sm" style="flex:1;">
               👁️ Details
             </button>
-            <button class="btn btn-gmaps btn-sm" style="flex:1;" onclick="openGoogleMaps(${data.lat}, ${data.lng}, event)">
+            <button class="btn btn-gmaps btn-sm" style="flex:1;" onclick="openGoogleMaps(${data.lat || 17.3850}, ${data.lng || 78.4867}, event)">
               🗺️ Maps
             </button>
           </div>
@@ -1361,6 +1371,8 @@
       card.className = 'house-card';
       card.onclick = () => openDetailsModal(data.id);
       const displayImg = (data.imageUrls && data.imageUrls[0]) || data.imageUrl || 'https://via.placeholder.com/300x200';
+      const rentVal = data.rent || data.price || '0';
+      const locVal = data.location || data.address || 'Hyderabad';
 
       card.innerHTML = `
         <div class="house-img-box">
@@ -1369,13 +1381,13 @@
         </div>
         <div class="house-info">
           <h4>${data.bhk || 'Rental Home'}</h4>
-          <div class="price">₹${data.rent}/month</div>
-          <div class="loc">📍 ${data.location}</div>
+          <div class="price">₹${rentVal}/month</div>
+          <div class="loc">📍 ${locVal}</div>
           <div style="display:flex; gap:8px; margin-top: auto;">
             <button class="btn btn-gradient btn-sm" style="flex:1;">
               👁️ Details
             </button>
-            <button class="btn btn-gmaps btn-sm" style="flex:1;" onclick="openGoogleMaps(${data.lat}, ${data.lng}, event)">
+            <button class="btn btn-gmaps btn-sm" style="flex:1;" onclick="openGoogleMaps(${data.lat || 17.3850}, ${data.lng || 78.4867}, event)">
               🗺️ Maps
             </button>
           </div>
